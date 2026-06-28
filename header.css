@@ -1,0 +1,12 @@
+.site-header{
+    background:url("https://lh3.googleusercontent.com/d/1eiGlBsnUVyRl1S6vK8iz8vg9Yr5k0rzS") center/cover no-repeat!important;
+    position:relative!important;
+    z-index:50!important;
+}
+
+@media (max-width:768px){
+    .site-header{
+        background-image:url("https://lh3.googleusercontent.com/d/1DDsVqiR4K8Q_aZ85bOMTSh5P-osdT8b3")!important;
+        background-position:left center!important;
+    }
+}
