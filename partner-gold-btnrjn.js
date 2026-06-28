@@ -186,6 +186,9 @@ createButton();
 }
 
 window.addEventListener("load",function(){
-setTimeout(init,800);
+    requestAnimationFrame(function(){
+        setTimeout(init,1200);
+    });
 });
+
 })();
