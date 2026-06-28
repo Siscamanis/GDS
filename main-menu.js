@@ -6,6 +6,8 @@
   style.textContent = `
 #main_menu_outer_container{
 position:relative!important;
+z-index:0!important;
+isolation:isolate!important;
 overflow:hidden!important;
 border-radius:20px!important;
 padding:2px!important;
@@ -22,7 +24,7 @@ padding:2px;
 background:linear-gradient(90deg,#ff004c,#ffcc00,#00ff73,#00d5ff,#7a00ff,#ff004c);
 background-size:400% 400%;
 animation:gadunBorderRGB 3s linear infinite;
-z-index:1;
+z-index:-2!important;
 pointer-events:none;
 -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
 -webkit-mask-composite:xor;
@@ -35,13 +37,13 @@ position:absolute;
 inset:2px;
 border-radius:18px;
 background:radial-gradient(circle at 12% 25%,rgba(0,255,100,.22),transparent 32%),radial-gradient(circle at 80% 65%,rgba(0,170,70,.22),transparent 34%),linear-gradient(135deg,#020402 0%,#062b12 48%,#010201 100%)!important;
-z-index:0;
+z-index:-1!important;
 pointer-events:none;
 }
 
 #main_menu_outer_container main{
 position:relative!important;
-z-index:2!important;
+z-index:1!important;
 display:flex!important;
 align-items:center!important;
 gap:16px!important;
@@ -77,6 +79,7 @@ animation:gadunMirror 5s linear infinite;
 
 #main_menu_outer_container main a{
 position:relative!important;
+z-index:1!important;
 min-width:58px!important;
 height:50px!important;
 padding:4px 2px!important;
@@ -115,7 +118,7 @@ top:-8px!important;
 right:-5px!important;
 width:25px!important;
 height:auto!important;
-z-index:10!important;
+z-index:2!important;
 filter:drop-shadow(0 2px 5px rgba(0,0,0,.7))!important;
 }
 
@@ -147,7 +150,7 @@ box-shadow:0 0 12px rgba(0,255,120,.75);
 #main_menu_outer_container .left_trigger,
 #main_menu_outer_container .right_trigger{
 position:relative!important;
-z-index:3!important;
+z-index:1!important;
 width:30px!important;
 height:30px!important;
 min-width:30px!important;
