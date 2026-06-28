@@ -1,3 +1,5 @@
+(function () {
+  const css = `
 .site-header{
     background:url("https://lh3.googleusercontent.com/d/1eiGlBsnUVyRl1S6vK8iz8vg9Yr5k0rzS") center/cover no-repeat!important;
     position:relative!important;
@@ -10,3 +12,10 @@
         background-position:left center!important;
     }
 }
+`;
+
+  const style = document.createElement("style");
+  style.id = "gadunslot-header-bg";
+  style.textContent = css;
+  document.head.appendChild(style);
+})();
