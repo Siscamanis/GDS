@@ -1,5 +1,5 @@
 (function () {
-  const LINK = "https://quick-ly.com/gadunslot-prediksi";
+  const LINK = "https://linkshortener.vip/gadunslot-prediksi";
 
   // Mobile only
   if (window.innerWidth > 768) return;
