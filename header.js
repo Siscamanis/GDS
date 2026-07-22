@@ -1,14 +1,14 @@
 (function () {
   const css = `
 .site-header{
-    background:url("https://lh3.googleusercontent.com/d/1eiGlBsnUVyRl1S6vK8iz8vg9Yr5k0rzS") center/cover no-repeat!important;
+    background:url("https://i.postimg.cc/PxQccMsQ/GDS062-1920x80.jpg") center/cover no-repeat!important;
     position:relative!important;
     z-index:50!important;
 }
 
 @media (max-width:768px){
     .site-header{
-        background-image:url("https://lh3.googleusercontent.com/d/1DDsVqiR4K8Q_aZ85bOMTSh5P-osdT8b3")!important;
+        background-image:url("https://i.postimg.cc/JhVRCKv7/GDS062-485x80.jpg")!important;
         background-position:left center!important;
     }
 }
