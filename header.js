@@ -1,14 +1,14 @@
 (function () {
   const css = `
 .site-header{
-    background:url("https://i.postimg.cc/PxQccMsQ/GDS062-1920x80.jpg") center/cover no-repeat!important;
+    background:url("http://plcl.me/images/ysWgh.jpg") center/cover no-repeat!important;
     position:relative!important;
     z-index:50!important;
 }
 
 @media (max-width:768px){
     .site-header{
-        background-image:url("https://i.postimg.cc/JhVRCKv7/GDS062-485x80.jpg")!important;
+        background-image:url("http://plcl.me/images/qjb7U.jpeg")!important;
         background-position:left center!important;
     }
 }
