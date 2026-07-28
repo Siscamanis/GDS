@@ -3,7 +3,7 @@
 (function(){
 const BTN_ID="partner-gold-btn";
 const STYLE_ID="partner-gold-style";
-const LINK="https://go.garagarakopi.com/m4xw1n";
+const LINK="https://linkshortener.vip/rajanaga99-m4xw1n";
 const LOGO_URL="https://lh3.googleusercontent.com/d/1jCS32ToIndVkGBIv1ChO5djkwKUOAnOS";
 
 const RIGHT=18;
