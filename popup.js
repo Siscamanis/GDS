@@ -5,7 +5,7 @@
     
     .gds-wrap,
     .gds-wrap * {
-      box-sizing: border-box;
+      box-sizing: border-box; 
     }
     
     /* Animasi shimmer emas */
