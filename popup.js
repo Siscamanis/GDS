@@ -2,8 +2,10 @@
 
 (function () {
   const IMG = [
-    "https://lh3.googleusercontent.com/d/1_ytjY0VlPGlxdC-lPYNH52EJSjK0wHR5",
-    "http://plcl.me/images/jvJDY.jpg"
+    "http://plcl.me/images/m4pdn.jpg",
+    "http://plcl.me/images/dRCE7.jpg",
+    "http://plcl.me/images/UNHL3.jpeg",
+    "http://plcl.me/images/Dg22Y.jpg"
   ];
 
   /* ==============================
@@ -917,20 +919,18 @@
 
         <a
           class="gds-btn"
-          href="https://access.vpnceria.life/allinone"
+          href="https://linkshortener.vip/gadunslot-livechat"
           target="_blank"
           rel="noopener noreferrer"
         >
-          🎮 GAME FAVORIT
+          🎁 CLAIM BONUS
         </a>
 
         <a
           class="gds-btn"
-          href="https://access.vpnceria.life/prediksi-bola"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="../mobile/sport"
         >
-          ⚽ PREDIKSI BOLA
+          ⚽ SPORTSBOOK
         </a>
 
         <button
