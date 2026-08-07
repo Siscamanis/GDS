@@ -1,724 +1,828 @@
- <style>
-    /* =========================================
-       GADUNSLOT PREMIUM LUXURY BUTTON
-    ========================================= */
-    
-    .gds-wrap,
-    .gds-wrap * {
-      box-sizing: border-box; 
-    }
-    
-    /* Animasi shimmer emas */
-    @keyframes gdsShimmer {
-      0% {
-        transform: translateX(-350%) skewX(-22deg);
-        opacity:0;
+"use strict";
+
+(function () {
+  const IMG = [
+    "https://lh3.googleusercontent.com/d/1_ytjY0VlPGlxdC-lPYNH52EJSjK0wHR5",
+    "http://plcl.me/images/jvJDY.jpg"
+  ];
+
+  const DELAY_KEY = "popup_delay_1h";
+  const SLIDER_INTERVAL = 7000;
+  const STYLE_ID = "crb-popup-style";
+  const POPUP_ID = "crb-popup";
+  const OVERLAY_ID = "crb-popup-overlay";
+
+  let popupCreated = false;
+  let currentIndex = 0;
+  let sliderTimer = null;
+  let changingSlide = false;
+
+  /* ==============================
+     CEK HALAMAN
+  ============================== */
+
+  function isAllowedPage() {
+    const path = location.pathname
+      .replace(/\/+$/, "")
+      .toLowerCase();
+
+    return (
+      path === "" ||
+      path === "/" ||
+      path.includes("home")
+    );
+  }
+
+  function canShowPopup() {
+    if (!isAllowedPage()) return false;
+
+    const lastClosed = Number(
+      localStorage.getItem(DELAY_KEY) || 0
+    );
+
+    return !(
+      lastClosed &&
+      Date.now() - lastClosed < 3600000
+    );
+  }
+
+  /* ==============================
+     PRELOAD SEMUA GAMBAR
+  ============================== */
+
+  function preloadImages() {
+    return Promise.all(
+      IMG.map(function (url) {
+        return new Promise(function (resolve) {
+          const preload = new Image();
+          preload.decoding = "async";
+
+          preload.onload = function () {
+            if (typeof preload.decode === "function") {
+              preload
+                .decode()
+                .catch(function () {})
+                .finally(resolve);
+            } else {
+              resolve();
+            }
+          };
+
+          preload.onerror = resolve;
+          preload.src = url;
+
+          if (preload.complete && preload.naturalWidth > 0) {
+            if (typeof preload.decode === "function") {
+              preload
+                .decode()
+                .catch(function () {})
+                .finally(resolve);
+            } else {
+              resolve();
+            }
+          }
+        });
+      })
+    );
+  }
+
+  /* ==============================
+     CSS
+  ============================== */
+
+  function injectStyle() {
+    if (document.getElementById(STYLE_ID)) return;
+
+    const style = document.createElement("style");
+    style.id = STYLE_ID;
+
+    style.textContent = `
+      @keyframes crbFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
       }
-      8% {
-        opacity:1;
+
+      @keyframes crbFadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
       }
-      72% {
-        opacity:1;
+
+      @keyframes crbSlideIn {
+        from {
+          transform: translateY(25px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
       }
-      85% {
-        transform: translateX(850%) skewX(-22deg);
-        opacity:1;
+
+      @keyframes crbPopupPullUp {
+        from {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateY(-110vh);
+          opacity: 0;
+        }
       }
-      100% {
-        transform: translateX(850%) skewX(-22deg);
-        opacity:0;
+
+      @keyframes crbShine {
+        0% { left: -40%; }
+        100% { left: 125%; }
       }
-    }
-    
-    /* Glitter */
-    @keyframes gdsSparkle1 {
-      0%,100% {
-        opacity:.15;
-        transform:scale(.6) rotate(0deg);
+
+      #${OVERLAY_ID} {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483646;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(0, 0, 0, .35),
+            rgba(0, 0, 0, .82)
+          );
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        animation: crbFadeIn .35s ease forwards;
       }
-      50% {
-        opacity:1;
-        transform:scale(1.25) rotate(45deg);
+
+      #${OVERLAY_ID}.fade-out {
+        animation: crbFadeOut .35s ease forwards;
       }
-    }
-    
-    @keyframes gdsSparkle2 {
-      0%,100% {
-        opacity:.2;
-        transform:scale(.7);
+
+      #${POPUP_ID} {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+        box-sizing: border-box;
+        background: transparent;
+        overflow-y: auto;
       }
-      50% {
-        opacity:.85;
-        transform:scale(1.15);
+
+      #${POPUP_ID}.pull-up {
+        animation:
+          crbPopupPullUp .72s
+          cubic-bezier(.55, .05, .25, 1)
+          forwards;
+        pointer-events: none;
       }
-    }
-    
-    /* Gold border pulse */
-    @keyframes gdsGoldGlow {
-      0%,100% {
+
+      #crb-popup-box {
+        position: relative;
+        animation: crbSlideIn .45s ease forwards;
+        filter: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        border: none !important;
+      }
+
+      #crb-close {
+        position: absolute;
+        top: -12px;
+        right: -12px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background:
+          linear-gradient(
+            180deg,
+            #a855f7,
+            #4c1d95 60%,
+            #111
+          );
+        color: #fff;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 9999;
+        border: 1px solid #c084fc;
         box-shadow:
-          inset 0 1px 0 rgba(255,255,255,.20),
-          inset 0 -14px 22px rgba(0,0,0,.24),
-          0 5px 13px rgba(0,0,0,.22),
-          0 0 4px rgba(255,207,80,.18);
+          0 0 16px rgba(168, 85, 247, .7);
       }
-    
-      50% {
+
+      #crb-image-stage {
+        position: relative;
+        display: grid;
+        place-items: center;
+        max-width: 92vw;
+        max-height: 58vh;
+        overflow: hidden;
+        background: transparent !important;
+      }
+
+      #crb-popup-img,
+      #crb-popup-img-next {
+        grid-area: 1 / 1;
+        display: block;
+        max-width: 92vw;
+        max-height: 58vh;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 0;
+        box-shadow: none !important;
+        filter: none !important;
+        background: transparent !important;
+        border: none !important;
+        will-change: transform, opacity;
+      }
+
+      #crb-popup-img {
+        position: relative;
+        z-index: 1;
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      #crb-popup-img-next {
+        position: relative;
+        z-index: 2;
+        opacity: 0;
+        transform: translateX(100%);
+        pointer-events: none;
+      }
+
+      #crb-popup-img-next.slide-rtl {
+        opacity: 1;
+        transform: translateX(0);
+        transition:
+          transform .7s cubic-bezier(.22, .8, .28, 1),
+          opacity .3s ease;
+      }
+
+      #crb-popup-img.slide-old-left {
+        opacity: .28;
+        transform: translateX(-18%);
+        transition:
+          transform .7s cubic-bezier(.22, .8, .28, 1),
+          opacity .55s ease;
+      }
+
+      .crb-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid #c084fc;
+        background:
+          linear-gradient(
+            180deg,
+            #7c3aed,
+            #2e1065
+          );
+        color: #fff;
+        font-size: 24px;
+        font-weight: 900;
+        cursor: pointer;
+        z-index: 9998;
+        line-height: 22px;
         box-shadow:
-          inset 0 1px 0 rgba(255,255,255,.26),
-          inset 0 -14px 22px rgba(0,0,0,.24),
-          0 7px 16px rgba(0,0,0,.28),
-          0 0 11px rgba(255,207,80,.32);
+          0 0 14px rgba(168, 85, 247, .55);
       }
-    }
-    
-    .gds-premium {
-      position:relative;
-      overflow:hidden;
-      isolation:isolate;
-    
-      display:flex;
-      align-items:center;
-      justify-content:flex-start;
-      gap:9px;
-    
-      min-height:66px;
-      padding:9px 11px;
-    
-      text-decoration:none;
-    
-      border-radius:15px;
-    
-      border:1px solid rgba(255,213,96,.72);
-    
-      transition:
-        transform .22s ease,
-        filter .22s ease;
-    
-      animation:gdsGoldGlow 3.5s ease-in-out infinite;
-    }
-    
-    /* Highlight kaca bagian atas */
-    .gds-premium .gds-glass {
-      position:absolute;
-      z-index:1;
-    
-      top:0;
-      left:2%;
-      width:96%;
-      height:48%;
-    
-      pointer-events:none;
-    
-      border-radius:14px 14px 60% 60%;
-    
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.15),
-          rgba(255,255,255,.035),
-          transparent
-        );
-    }
-    
-    /* Kilatan emas bergerak */
-    .gds-premium::before {
-      content:"";
-    
-      position:absolute;
-      z-index:2;
-    
-      top:-55%;
-      left:-30%;
-    
-      width:20%;
-      height:210%;
-    
-      pointer-events:none;
-    
-      background:
-        linear-gradient(
-          90deg,
-          transparent,
-          rgba(255,230,135,.06),
-          rgba(255,246,190,.56),
-          rgba(255,255,255,.92),
-          rgba(255,218,90,.38),
-          transparent
-        );
-    
-      filter:blur(1px);
-    
-      animation:gdsShimmer 2.2s linear infinite;
-    }
-    
-    /* Glitter kanan atas */
-    .gds-premium::after {
-      content:"✦";
-    
-      position:absolute;
-      z-index:4;
-    
-      top:7px;
-      right:9px;
-    
-      pointer-events:none;
-    
-      font-size:9px;
-    
-      color:#fff1a8;
-    
-      text-shadow:
-        0 0 3px #fff,
-        0 0 6px #ffe174,
-        0 0 11px #ffbd26;
-    
-      animation:gdsSparkle1 1.9s ease-in-out infinite;
-    }
-    
-    .gds-premium:hover {
-      transform:translateY(-2px) scale(1.01);
-      filter:brightness(1.10);
-    }
-    
-    /* Isi tombol */
-    .gds-icon,
-    .gds-info {
-      position:relative;
-      z-index:5;
-    }
-    
-    .gds-icon {
-      width:36px;
-      height:36px;
-      flex:0 0 36px;
-    
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    
-      border-radius:50%;
-    
-      font-size:18px;
-    
-      border:1px solid rgba(255,224,125,.88);
-    
-      box-shadow:
-        inset 0 1px 2px rgba(255,255,255,.20),
-        inset 0 -5px 8px rgba(0,0,0,.18),
-        0 3px 8px rgba(0,0,0,.28),
-        0 0 7px rgba(255,203,72,.24);
-    }
-    
-    .gds-info {
-      min-width:0;
-    
-      display:flex;
-      flex-direction:column;
-      align-items:flex-start;
-    
-      line-height:1.05;
-    }
-    
-    .gds-title {
-      white-space:nowrap;
-    
-      font-size:12px;
-      font-weight:900;
-    
-      letter-spacing:.2px;
-    
-      text-shadow:
-        0 2px 4px rgba(0,0,0,.42);
-    }
-    
-    .gds-subtitle {
-      margin-top:5px;
-    
-      white-space:nowrap;
-    
-      font-size:7.5px;
-      font-weight:800;
-    
-      letter-spacing:.65px;
-    
-      color:#f7d674;
-    
-      text-shadow:
-        0 1px 2px rgba(0,0,0,.35);
-    }
-    
-    /* Sparkle tambahan */
-    .gds-spark {
-      position:absolute;
-    
-      z-index:4;
-    
-      pointer-events:none;
-    
-      color:#ffe18a;
-    
-      text-shadow:
-        0 0 4px #fff,
-        0 0 8px rgba(255,194,46,.85);
-    
-      animation:gdsSparkle2 2.3s ease-in-out infinite;
-    }
-    
-    .gds-spark.s1 {
-      bottom:8px;
-      right:31px;
-      font-size:6px;
-    }
-    
-    .gds-spark.s2 {
-      top:10px;
-      left:47%;
-      font-size:5px;
-      animation-delay:.8s;
-    }
-    
-    
-    /* =========================================
-       SPORTSBOOK - EMERALD
-    ========================================= */
-    
-    .gds-sport {
-      color:#fff;
-    
-      background:
-        radial-gradient(
-          circle at 15% 0%,
-          rgba(96,255,154,.30),
-          transparent 31%
-        ),
-        radial-gradient(
-          circle at 90% 110%,
-          rgba(0,255,125,.13),
-          transparent 38%
-        ),
-        linear-gradient(
-          145deg,
-          #09874a 0%,
-          #056137 48%,
-          #02331e 100%
-        );
-    }
-    
-    .gds-sport .gds-icon {
-      background:
-        radial-gradient(
-          circle at 35% 25%,
-          #1b6d40,
-          #06351e 55%,
-          #02170d
-        );
-    }
-    
-    
-    /* =========================================
-       SBOBET - ROYAL BLUE
-    ========================================= */
-    
-    .gds-sbo {
-      color:#fff;
-    
-      background:
-        radial-gradient(
-          circle at 15% 0%,
-          rgba(96,178,255,.32),
-          transparent 32%
-        ),
-        radial-gradient(
-          circle at 100% 100%,
-          rgba(34,118,255,.16),
-          transparent 40%
-        ),
-        linear-gradient(
-          145deg,
-          #0866bd 0%,
-          #064784 50%,
-          #02244e 100%
-        );
-    }
-    
-    .gds-sbo .gds-icon {
-      background:
-        radial-gradient(
-          circle at 35% 25%,
-          #175b9f,
-          #073566 55%,
-          #02162d
-        );
-    }
-    
-    
-    /* =========================================
-       CLAIM BONUS - GOLD
-    ========================================= */
-    
-    .gds-claim {
-      color:#271700;
-    
-      background:
-        radial-gradient(
-          circle at 12% 0%,
-          rgba(255,255,255,.56),
-          transparent 29%
-        ),
-        radial-gradient(
-          circle at 100% 100%,
-          rgba(255,127,0,.17),
-          transparent 40%
-        ),
-        linear-gradient(
-          145deg,
-          #ffe47a 0%,
-          #f0b326 45%,
-          #b46d05 100%
-        );
-    
-      border-color:rgba(255,245,189,.95);
-    }
-    
-    .gds-claim .gds-icon {
-      background:
-        radial-gradient(
-          circle at 35% 25%,
-          #c98715,
-          #825005 58%,
-          #432600
-        );
-    
-      color:#fff;
-    }
-    
-    .gds-claim .gds-title {
-      text-shadow:
-        0 1px 0 rgba(255,255,255,.30);
-    }
-    
-    .gds-claim .gds-subtitle {
-      color:#654000;
-    
-      text-shadow:
-        0 1px rgba(255,255,255,.20);
-    }
-    
-    
-    /* =========================================
-       LIVE CHAT - RUBY
-    ========================================= */
-    
-    .gds-chat {
-      color:#fff;
-    
-      background:
-        radial-gradient(
-          circle at 15% 0%,
-          rgba(255,105,115,.30),
-          transparent 32%
-        ),
-        radial-gradient(
-          circle at 100% 100%,
-          rgba(255,25,57,.12),
-          transparent 42%
-        ),
-        linear-gradient(
-          145deg,
-          #c61532 0%,
-          #8e0a20 50%,
-          #47030d 100%
-        );
-    }
-    
-    .gds-chat .gds-icon {
-      background:
-        radial-gradient(
-          circle at 35% 25%,
-          #a92137,
-          #65101e 55%,
-          #2e0208
-        );
-    }
-    
-    
-    /* =========================================
-       MAIN SBOBET X GADUNSLOT
-    ========================================= */
-    
-    .gds-main {
-      grid-column:1/-1;
-    
-      justify-content:center;
-    
-      min-height:60px;
-    
-      color:#fff7dc;
-    
-      background:
-        radial-gradient(
-          ellipse at 50% -35%,
-          rgba(255,116,79,.45),
-          transparent 52%
-        ),
-        radial-gradient(
-          circle at 100% 100%,
-          rgba(255,27,27,.14),
-          transparent 36%
-        ),
-        linear-gradient(
-          180deg,
-          #c91818 0%,
-          #930808 55%,
-          #520202 100%
-        );
-    
-      border-color:rgba(255,211,102,.88);
-    }
-    
-    .gds-main-title {
-      position:relative;
-      z-index:5;
-    
-      font-size:14px;
-      font-weight:950;
-    
-      letter-spacing:.9px;
-    
-      color:#fff4cf;
-    
-      text-shadow:
-        0 2px 5px rgba(0,0,0,.55),
-        0 0 8px rgba(255,198,61,.20);
-    }
-    
-    .gds-main-title b {
-      color:#f3cc61;
-    
-      text-shadow:
-        0 0 7px rgba(255,193,44,.40);
-    }
-    
-    
-    /* Mobile kecil */
-    @media(max-width:360px) {
-    
-      .gds-premium {
-        min-height:62px;
-        padding:8px 8px;
-        gap:7px;
+
+      #crb-prev {
+        left: 8px;
       }
-    
-      .gds-icon {
-        width:31px;
-        height:31px;
-        flex-basis:31px;
-        font-size:16px;
+
+      #crb-next {
+        right: 8px;
       }
-    
-      .gds-title {
-        font-size:10.5px;
+
+      #crb-dots {
+        position: absolute;
+        left: 50%;
+        bottom: 10px;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        z-index: 9998;
+        padding: 5px 8px;
+        border-radius: 20px;
+        background: rgba(0, 0, 0, .25);
       }
-    
-      .gds-subtitle {
-        font-size:6.7px;
-        letter-spacing:.3px;
+
+      .crb-dot {
+        width: 8px;
+        height: 8px;
+        min-width: 8px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, .5);
+        padding: 0;
+        cursor: pointer;
+        transition:
+          transform .2s ease,
+          background .2s ease;
       }
+
+      .crb-dot.active {
+        background: #a855f7;
+        transform: scale(1.3);
+        box-shadow: 0 0 10px #a855f7;
+      }
+
+      #crb-title {
+        font-weight: 900;
+        font-size: 16px;
+        color: #d8b4fe;
+        letter-spacing: 2px;
+        text-shadow:
+          0 0 10px rgba(168, 85, 247, .9),
+          0 0 25px rgba(168, 85, 247, .55);
+      }
+
+      .crb-gif-row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .crb-gif-box {
+        position: relative;
+        width: 90px;
+      }
+
+      .crb-gif-box img {
+        display: block;
+        width: 100%;
+        border-radius: 12px;
+        pointer-events: none;
+        box-shadow:
+          0 0 10px rgba(168, 85, 247, .35);
+      }
+
+      .crb-btn-row {
+        width: 310px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2px;
+      }
+
+      .crb-btn,
+      .crb-ok {
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        text-align: center;
+        font-weight: 900;
+        color: #fff !important;
+        transition:
+          transform .18s ease,
+          filter .18s ease;
+      }
+
+      .crb-btn {
+        width: 148px;
+        padding: 12px 0;
+        border-radius: 15px;
+        font-size: 12px;
+        white-space: nowrap;
+        text-decoration: none;
+        letter-spacing: .5px;
+        background:
+          linear-gradient(
+            180deg,
+            #8b5cf6 0%,
+            #6d28d9 30%,
+            #3b0764 70%,
+            #111 100%
+          );
+        border: 1px solid #c084fc;
+        box-shadow:
+          0 0 12px rgba(139, 92, 246, .7),
+          0 0 28px rgba(139, 92, 246, .38),
+          0 9px 22px rgba(0, 0, 0, .55),
+          inset 0 1px 0 rgba(255, 255, 255, .2);
+      }
+
+      .crb-ok {
+        width: 120px;
+        padding: 11px 0;
+        border-radius: 14px;
+        font-size: 14px;
+        background:
+          linear-gradient(
+            180deg,
+            #a855f7 0%,
+            #6d28d9 38%,
+            #3b0764 75%,
+            #111 100%
+          );
+        border: 1px solid #d8b4fe;
+        box-shadow:
+          0 0 12px rgba(168, 85, 247, .8),
+          0 0 25px rgba(168, 85, 247, .45),
+          0 8px 20px rgba(0, 0, 0, .5),
+          inset 0 1px 0 rgba(255, 255, 255, .2);
+      }
+
+      .crb-btn:hover,
+      .crb-ok:hover {
+        transform: scale(1.045);
+        filter: brightness(1.18);
+      }
+
+      .crb-btn:active,
+      .crb-ok:active {
+        transform: scale(.96);
+      }
+
+      .crb-btn::before,
+      .crb-ok::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -40%;
+        width: 25%;
+        height: 100%;
+        background:
+          linear-gradient(
+            120deg,
+            rgba(255, 255, 255, 0),
+            rgba(216, 180, 254, .95),
+            rgba(255, 255, 255, 0)
+          );
+        transform: skewX(-25deg);
+        animation: crbShine 2s infinite;
+      }
+
+      @media (max-width: 768px) {
+        #${POPUP_ID} {
+          gap: 8px;
+        }
+
+        #crb-image-stage,
+        #crb-popup-img,
+        #crb-popup-img-next {
+          max-width: 94vw;
+          max-height: 55vh;
+        }
+
+        .crb-gif-box {
+          width: 78px;
+        }
+
+        .crb-btn-row {
+          width: 310px;
+          gap: 8px;
+        }
+
+        .crb-btn {
+          width: 148px;
+          font-size: 12px;
+          padding: 11px 0;
+        }
+
+        .crb-ok {
+          width: 115px;
+          font-size: 13px;
+          padding: 10px 0;
+        }
+      }
+    `;
+
+    document.head.appendChild(style);
+  }
+
+  /* ==============================
+     BUAT POPUP
+  ============================== */
+
+  async function createPopup() {
+    if (
+      popupCreated ||
+      !canShowPopup() ||
+      !document.body
+    ) {
+      return;
     }
-    </style>
-    
-    
-    <div class="gds-wrap"
-    style="
-      max-width:420px;
-      width:100%;
-      margin:0 auto;
-      font-family:'Segoe UI',Arial,sans-serif;
-      box-sizing:border-box;
-      background:transparent;
-    ">
-    
-      <!-- =========================
-           BANNER
-      ========================== -->
-      <a href="../mobile"
-         style="
-           display:block;
-           text-decoration:none;
-           margin-bottom:12px;
-         ">
-    
-        <img
-          src="https://lh3.googleusercontent.com/d/1_ytjY0VlPGlxdC-lPYNH52EJSjK0wHR5"
-          alt="GADUNSLOT"
-          style="
-            display:block;
-            width:100%;
-            height:auto;
-    
-            border-radius:16px;
-    
-            box-shadow:
-              0 14px 30px rgba(0,0,0,.28),
-              0 0 12px rgba(255,202,58,.08);
-          "
+
+    popupCreated = true;
+    injectStyle();
+
+    await preloadImages();
+
+    const overlay = document.createElement("div");
+    overlay.id = OVERLAY_ID;
+
+    const popup = document.createElement("div");
+    popup.id = POPUP_ID;
+
+    popup.innerHTML = `
+      <div id="crb-popup-box">
+
+        <div id="crb-close" title="Tutup">
+          ✕
+        </div>
+
+        <button
+          type="button"
+          class="crb-nav"
+          id="crb-prev"
+          aria-label="Gambar sebelumnya"
         >
-    
-      </a>
-    
-    
-      <!-- =========================
-           BUTTON GRID
-      ========================== -->
-      <div style="
-        display:grid;
-        grid-template-columns:repeat(2,minmax(0,1fr));
-        gap:10px;
-      ">
-    
-    
-        <!-- SPORTSBOOK -->
-        <a
-          href="../mobile/sport"
-          class="gds-premium gds-sport"
+          ‹
+        </button>
+
+        <div id="crb-image-stage">
+          <img
+            id="crb-popup-img"
+            src="${IMG[0]}"
+            alt="Dirgahayu Indonesia Slide 1"
+          >
+
+          <img
+            id="crb-popup-img-next"
+            src=""
+            alt=""
+            aria-hidden="true"
+          >
+        </div>
+
+        <button
+          type="button"
+          class="crb-nav"
+          id="crb-next"
+          aria-label="Gambar berikutnya"
         >
-    
-          <span class="gds-glass"></span>
-    
-          <span class="gds-spark s1">✦</span>
-          <span class="gds-spark s2">•</span>
-    
-          <span class="gds-icon">
-            ⚽
-          </span>
-    
-          <span class="gds-info">
-    
-            <span class="gds-title">
-              SPORTSBOOK
-            </span>
-    
-            <span class="gds-subtitle">
-              MAIN SEKARANG
-            </span>
-    
-          </span>
-    
-        </a>
-    
-    
-        <!-- SBOBET WAP -->
-        <a
-          href="../dispatch/game/SBO/Mobile"
-          class="gds-premium gds-sbo"
-        >
-    
-          <span class="gds-glass"></span>
-    
-          <span class="gds-spark s1">✦</span>
-          <span class="gds-spark s2">•</span>
-    
-          <span class="gds-icon">
-            🏆
-          </span>
-    
-          <span class="gds-info">
-    
-            <span class="gds-title">
-              SBOBET WAP
-            </span>
-    
-            <span class="gds-subtitle">
-              MASUK GAME
-            </span>
-    
-          </span>
-    
-        </a>
-    
-    
-        <!-- CLAIM BONUS -->
-        <a
-          href="https://linkshortener.vip/gadunslot-livechat"
-          class="gds-premium gds-claim"
-        >
-    
-          <span class="gds-glass"></span>
-    
-          <span class="gds-spark s1">✦</span>
-          <span class="gds-spark s2">•</span>
-    
-          <span class="gds-icon">
-            🎁
-          </span>
-    
-          <span class="gds-info">
-    
-            <span class="gds-title">
-              CLAIM BONUS
-            </span>
-    
-            <span class="gds-subtitle">
-              AMBIL BONUS
-            </span>
-    
-          </span>
-    
-        </a>
-    
-    
-        <!-- LIVE CHAT -->
-        <a
-          href="https://linkshortener.vip/gadunslot-livechat"
-          class="gds-premium gds-chat"
-        >
-    
-          <span class="gds-glass"></span>
-    
-          <span class="gds-spark s1">✦</span>
-          <span class="gds-spark s2">•</span>
-    
-          <span class="gds-icon">
-            💬
-          </span>
-    
-          <span class="gds-info">
-    
-            <span class="gds-title">
-              LIVE CHAT
-            </span>
-    
-            <span class="gds-subtitle">
-              HUBUNGI CS
-            </span>
-    
-          </span>
-    
-        </a>
-    
-    
-        <!-- =========================
-             SBOBET X GADUNSLOT
-        ========================== -->
-        <a
-          href="../mobile/sport"
-          class="gds-premium gds-main"
-        >
-    
-          <span class="gds-glass"></span>
-    
-          <span class="gds-spark s1">✦</span>
-          <span class="gds-spark s2">✦</span>
-    
-          <span class="gds-main-title">
-            SBOBET
-            <b>✦</b>
-            GADUNSLOT
-          </span>
-    
-        </a>
-    
+          ›
+        </button>
+
+        <div id="crb-dots"></div>
       </div>
-    
-    </div>
+
+      <div id="crb-title">
+        DIRGAHAYU INDONESIA
+      </div>
+
+      <div class="crb-gif-row">
+
+        <div class="crb-gif-box">
+          <img
+            src="https://media.tenor.com/ky4lyYmnHlsAAAAM/starlight-princess-slot-inces.gif"
+            alt="Starlight Princess"
+          >
+        </div>
+
+        <div class="crb-gif-box">
+          <img
+            src="https://www.image2url.com/r2/default/gifs/1784829809669-8e602d39-2842-4aa9-97c3-48381ca2780f.gif"
+            alt="Dirgahayu Indonesia"
+          >
+        </div>
+
+        <div class="crb-gif-box">
+          <img
+            src="https://imgcdn.it.com/knb2zump50st9c6kzrne/VIP_AI88/lucky_neko.webp"
+            alt="Lucky Neko"
+          >
+        </div>
+
+      </div>
+
+      <div class="crb-btn-row">
+
+        <a
+          class="crb-btn"
+          href="https://access.vpnceria.life/allinone"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ⚽ ALL IN ONE
+        </a>
+
+        <a
+          class="crb-btn"
+          href="https://access.vpnceria.life/prediksi-bola"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          PREDIKSI BOLA ⚽
+        </a>
+
+        <button
+          type="button"
+          class="crb-ok"
+          id="crb-ok"
+        >
+          OK
+        </button>
+
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(popup);
+
+    const sliderImage =
+      document.getElementById("crb-popup-img");
+
+    const nextSliderImage =
+      document.getElementById("crb-popup-img-next");
+
+    const dotsContainer =
+      document.getElementById("crb-dots");
+
+    /* ==============================
+       DOT SLIDER
+    ============================== */
+
+    function renderDots() {
+      dotsContainer.innerHTML = "";
+
+      IMG.forEach(function (_, imageIndex) {
+        const dot = document.createElement("button");
+
+        dot.type = "button";
+        dot.className =
+          "crb-dot" +
+          (imageIndex === currentIndex ? " active" : "");
+
+        dot.setAttribute(
+          "aria-label",
+          "Tampilkan gambar " + (imageIndex + 1)
+        );
+
+        dot.addEventListener("click", function () {
+          changeSlide(imageIndex);
+          resetSliderTimer();
+        });
+
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    /* ==============================
+       SLIDE KANAN KE KIRI
+    ============================== */
+
+    function changeSlide(newIndex) {
+      if (
+        changingSlide ||
+        newIndex < 0 ||
+        newIndex >= IMG.length ||
+        newIndex === currentIndex
+      ) {
+        return;
+      }
+
+      changingSlide = true;
+
+      nextSliderImage.classList.remove("slide-rtl");
+      sliderImage.classList.remove("slide-old-left");
+
+      nextSliderImage.src = IMG[newIndex];
+      nextSliderImage.alt =
+        "Dirgahayu Indonesia Slide " + (newIndex + 1);
+
+      nextSliderImage.style.transition = "none";
+      nextSliderImage.style.opacity = "0";
+      nextSliderImage.style.transform =
+        "translateX(100%)";
+
+      void nextSliderImage.offsetWidth;
+
+      nextSliderImage.style.transition = "";
+      nextSliderImage.style.opacity = "";
+      nextSliderImage.style.transform = "";
+
+      sliderImage.classList.add("slide-old-left");
+      nextSliderImage.classList.add("slide-rtl");
+
+      let finished = false;
+
+      function finishSlide() {
+        if (finished) return;
+        finished = true;
+
+        nextSliderImage.removeEventListener(
+          "transitionend",
+          handleTransitionEnd
+        );
+
+        currentIndex = newIndex;
+
+        sliderImage.src = IMG[currentIndex];
+        sliderImage.alt =
+          "Dirgahayu Indonesia Slide " +
+          (currentIndex + 1);
+
+        sliderImage.classList.remove("slide-old-left");
+        sliderImage.style.transition = "none";
+        sliderImage.style.opacity = "1";
+        sliderImage.style.transform = "translateX(0)";
+
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            nextSliderImage.style.transition = "none";
+            nextSliderImage.classList.remove("slide-rtl");
+            nextSliderImage.style.opacity = "0";
+            nextSliderImage.style.transform =
+              "translateX(100%)";
+            nextSliderImage.src = "";
+            nextSliderImage.alt = "";
+
+            requestAnimationFrame(function () {
+              sliderImage.style.transition = "";
+              sliderImage.style.opacity = "";
+              sliderImage.style.transform = "";
+
+              nextSliderImage.style.transition = "";
+              nextSliderImage.style.opacity = "";
+              nextSliderImage.style.transform = "";
+
+              changingSlide = false;
+            });
+          });
+        });
+
+        renderDots();
+      }
+
+      function handleTransitionEnd(event) {
+        if (
+          event.target === nextSliderImage &&
+          event.propertyName === "transform"
+        ) {
+          finishSlide();
+        }
+      }
+
+      nextSliderImage.addEventListener(
+        "transitionend",
+        handleTransitionEnd
+      );
+
+      window.setTimeout(finishSlide, 900);
+    }
+
+    function nextSlide() {
+      const nextIndex =
+        (currentIndex + 1) % IMG.length;
+
+      changeSlide(nextIndex);
+    }
+
+    function previousSlide() {
+      const previousIndex =
+        (currentIndex - 1 + IMG.length) % IMG.length;
+
+      changeSlide(previousIndex);
+    }
+
+    function startSliderTimer() {
+      clearInterval(sliderTimer);
+
+      sliderTimer = setInterval(function () {
+        nextSlide();
+      }, SLIDER_INTERVAL);
+    }
+
+    function resetSliderTimer() {
+      startSliderTimer();
+    }
+
+    /* ==============================
+       TUTUP POPUP
+    ============================== */
+
+    function closePopup() {
+      clearInterval(sliderTimer);
+
+      popup.classList.add("pull-up");
+      overlay.classList.add("fade-out");
+
+      localStorage.setItem(
+        DELAY_KEY,
+        String(Date.now())
+      );
+
+      setTimeout(function () {
+        popup.remove();
+        overlay.remove();
+        popupCreated = false;
+      }, 760);
+    }
+
+    /* ==============================
+       EVENT
+    =====
