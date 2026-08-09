@@ -514,54 +514,7 @@
           rgba(21,153,71,.35);
       }
 
-     /* ==============================
-   GIF - BLEND BACKGROUND
-   ============================== */
-
-.gds-gif-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0;
-
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(7, 35, 18, .95) 0%,
-      rgba(3, 20, 10, .90) 45%,
-      rgba(1, 12, 6, 0) 75%
-    );
-}
-
-.gds-gif-box {
-  width: auto;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-}
-
-.gds-gif-box img {
-  display: block;
-
-  width: 280px;
-  max-width: 90vw;
-  height: auto;
-
-  border: none;
-  border-radius: 12px;
-  box-shadow: none;
-
-  filter:
-    brightness(1.03)
-    contrast(1.04)
-    saturate(1.06)
-    drop-shadow(0 0 10px rgba(18, 130, 60, .18));
-
-  pointer-events: none;
-}
-
+    
       /* ==============================
          BUTTON
       ============================== */
