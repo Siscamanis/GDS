@@ -892,22 +892,8 @@
 
         <div class="gds-gif-box">
           <img
-            src="https://media.tenor.com/ky4lyYmnHlsAAAAM/starlight-princess-slot-inces.gif"
-            alt="Starlight Princess"
-          >
-        </div>
-
-        <div class="gds-gif-box">
-          <img
-            src="https://www.image2url.com/r2/default/gifs/1784829809669-8e602d39-2842-4aa9-97c3-48381ca2780f.gif"
-            alt="GADUNSLOT Kemerdekaan"
-          >
-        </div>
-
-        <div class="gds-gif-box">
-          <img
-            src="https://imgcdn.it.com/knb2zump50st9c6kzrne/VIP_AI88/lucky_neko.webp"
-            alt="Lucky Neko"
+            src="https://www.image2url.com/r2/default/gifs/1786256128549-3e23d647-4d73-47b1-b49b-3c85daf40fc3.gif"
+            alt="GADUNSLOT GIF"
           >
         </div>
 
