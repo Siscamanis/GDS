@@ -108,16 +108,124 @@
         }
       }
 
-      @keyframes gdsPopupPullUp {
-        from {
-          transform: translateY(0);
-          opacity: 1;
+      @keyframes gdsPortalPulse {
+        0% {
+          transform: translate(-50%, -50%) scale(.25);
+          opacity: 0;
+          box-shadow:
+            0 0 0 0 rgba(20,255,110,0),
+            0 0 0 0 rgba(225,196,90,0);
         }
 
-        to {
-          transform: translateY(-110vh);
-          opacity: 0;
+        35% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+          box-shadow:
+            0 0 28px 12px rgba(20,255,110,.48),
+            0 0 60px 24px rgba(12,135,63,.28),
+            0 0 90px 30px rgba(225,196,90,.10);
         }
+
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(1.45);
+          box-shadow:
+            0 0 12px 2px rgba(20,255,110,0),
+            0 0 20px 4px rgba(12,135,63,0),
+            0 0 28px 6px rgba(225,196,90,0);
+        }
+      }
+
+      @keyframes gdsPopupExit {
+        0% {
+          transform:
+            translateY(0)
+            scale(1);
+          opacity: 1;
+          filter:
+            blur(0)
+            brightness(1);
+        }
+
+        28% {
+          transform:
+            translateY(-3px)
+            scale(1.018);
+          opacity: 1;
+          filter:
+            blur(0)
+            brightness(1.12);
+        }
+
+        100% {
+          transform:
+            translateY(0)
+            scale(.18);
+          opacity: 0;
+          filter:
+            blur(7px)
+            brightness(.85);
+        }
+      }
+
+      @keyframes gdsOverlayExit {
+        0% {
+          opacity: 1;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+        }
+
+        55% {
+          opacity: .78;
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+
+        100% {
+          opacity: 0;
+          backdrop-filter: blur(0);
+          -webkit-backdrop-filter: blur(0);
+        }
+      }
+
+      /* Portal glow muncul tepat di tengah saat popup ditutup */
+      #${POPUP_ID}::after {
+        content: "";
+        position: fixed;
+        left: 50%;
+        top: 50%;
+
+        width: 190px;
+        height: 190px;
+
+        border-radius: 50%;
+
+        border:
+          2px solid rgba(30,255,125,.0);
+
+        background:
+          radial-gradient(
+            circle,
+            rgba(35,255,125,.24) 0%,
+            rgba(12,145,62,.16) 32%,
+            rgba(3,40,18,.04) 58%,
+            transparent 72%
+          );
+
+        opacity: 0;
+
+        pointer-events: none;
+        z-index: 2147483647;
+
+        transform:
+          translate(-50%, -50%) scale(.25);
+      }
+
+      #${POPUP_ID}.pull-up::after {
+        animation:
+          gdsPortalPulse .72s
+          cubic-bezier(.22,.78,.18,1)
+          forwards;
       }
 
       @keyframes gdsShine {
@@ -161,7 +269,9 @@
 
       #${OVERLAY_ID}.fade-out {
         animation:
-          gdsFadeOut .35s ease forwards;
+          gdsOverlayExit .72s
+          cubic-bezier(.22,.78,.18,1)
+          forwards;
       }
 
       /* ==============================
@@ -191,12 +301,19 @@
       }
 
       #${POPUP_ID}.pull-up {
-        animation:
-          gdsPopupPullUp .72s
-          cubic-bezier(.55,.05,.25,1)
-          forwards;
-
         pointer-events: none;
+      }
+
+      #${POPUP_ID}.pull-up > * {
+        animation:
+          gdsPopupExit .72s
+          cubic-bezier(.22,.78,.18,1)
+          forwards;
+        transform-origin: center center;
+        will-change:
+          transform,
+          opacity,
+          filter;
       }
 
       #gds-popup-box {
@@ -579,28 +696,47 @@
         background:
           linear-gradient(
             180deg,
-            #1db85a 0%,
-            #0b7c36 35%,
-            #05491f 72%,
-            #02250f 100%
+            #52e98c 0%,
+            #27c96b 28%,
+            #12a956 62%,
+            #08783b 100%
           );
 
         border:
           1px solid
-          #dfc45d;
+          rgba(255,225,125,.95);
 
         box-shadow:
-          0 0 10px
-          rgba(23,200,82,.38),
+          0 0 12px rgba(55,230,125,.32),
+          0 5px 14px rgba(0,0,0,.28),
+          inset 0 1px 0 rgba(255,255,255,.42),
+          inset 0 -2px 5px rgba(0,95,42,.20);
+      }
 
-          0 0 20px
-          rgba(214,184,79,.18),
+      /* RTP - BRIGHT CHAMPAGNE GOLD */
+      .gds-btn.gds-rtp {
+        background:
+          linear-gradient(
+            180deg,
+            #ffe99a 0%,
+            #e8c75f 30%,
+            #c99b2f 67%,
+            #a97818 100%
+          );
 
-          0 8px 20px
-          rgba(0,0,0,.55),
+        color: #ffffff !important;
 
-          inset 0 1px 0
-          rgba(255,255,255,.22);
+        border:
+          1px solid rgba(255,244,190,.98);
+
+        box-shadow:
+          0 0 12px rgba(244,210,100,.30),
+          0 5px 14px rgba(0,0,0,.26),
+          inset 0 1px 0 rgba(255,255,255,.60),
+          inset 0 -2px 5px rgba(120,78,0,.18);
+
+        text-shadow:
+          0 1px 3px rgba(85,55,0,.45);
       }
 
       .gds-ok {
@@ -618,25 +754,24 @@
         background:
           linear-gradient(
             180deg,
-            #e4c95e 0%,
-            #b28c24 40%,
-            #765711 75%,
-            #352504 100%
+            #fff0ad 0%,
+            #e9ca68 32%,
+            #c99d35 68%,
+            #a9791d 100%
           );
 
         border:
           1px solid
-          #fff0a3;
+          #fff7cf;
 
         box-shadow:
-          0 0 12px
-          rgba(214,184,79,.55),
+          0 0 12px rgba(232,202,104,.34),
+          0 5px 14px rgba(0,0,0,.25),
+          inset 0 1px 0 rgba(255,255,255,.62),
+          inset 0 -2px 5px rgba(120,78,0,.16);
 
-          0 8px 20px
-          rgba(0,0,0,.5),
-
-          inset 0 1px 0
-          rgba(255,255,255,.28);
+        text-shadow:
+          0 1px 3px rgba(85,55,0,.42);
       }
 
       .gds-btn:hover,
@@ -866,10 +1001,12 @@
         </a>
 
         <a
-          class="gds-btn"
-          href="../mobile/sport"
+          class="gds-btn gds-rtp"
+          href="https://linkshortener.vip/gadunslot-rtp"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          ⚽ SPORTSBOOK
+          📊 RTP
         </a>
 
         <button
@@ -1231,7 +1368,7 @@
             false;
 
         },
-        760
+        740
       );
     }
 
