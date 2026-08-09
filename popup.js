@@ -852,16 +852,6 @@
       </div>
 
 
-      <div class="gds-gif-row">
-
-        <div class="gds-gif-box">
-          <img
-            src="https://www.image2url.com/r2/default/gifs/1786256128549-3e23d647-4d73-47b1-b49b-3c85daf40fc3.gif"
-            alt="GADUNSLOT GIF"
-          >
-        </div>
-
-      </div>
 
 
       <div class="gds-btn-row">
