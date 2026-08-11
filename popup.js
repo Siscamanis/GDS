@@ -982,9 +982,22 @@
       </div>
 
 
-      <div id="gds-title">
-        GADUNSLOT • DIRGAHAYU INDONESIA
-      </div>
+     <style>
+#gds-title{
+  display:inline-block;
+  font-weight:800;
+  background:linear-gradient(110deg,#176b45 25%,#d62828 43%,#fff 50%,#d62828 57%,#176b45 75%);
+  background-size:250%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shine 3s linear infinite;
+}
+@keyframes shine{
+  to{background-position:-250%}
+}
+</style>
+
+<div id="gds-title">GADUNSLOT • DIRGAHAYU INDONESIA</div>
 
 
 
