@@ -2,9 +2,7 @@
 
 (function () {
   const IMG = [
-    "http://plcl.me/images/kJb4W.png",
-    "http://plcl.me/images/RCDaF.png",
-    "http://plcl.me/images/4bMCR.png"
+    "http://plcl.me/images/gdpht.png"
   ];
 
   /* ==============================
