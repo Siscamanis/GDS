@@ -1,14 +1,6 @@
 /**
  * ============================================================
- * GADUNSLOT — MINI APP HEADER REPLACER V2
- * ============================================================
- * Mobile First
- * Replace APK Default
- * No Delay
- * No Tracker
- * No Analytics
- * No External Competitor Link
- * ============================================================
+ * GADUNSLOT — MINI APP
  */
 
 (function () {
@@ -1048,7 +1040,7 @@
 
     <span class="gds-mini-title">
 
-      Install
+      Mini App
 
       <strong>
         GADUNSLOT
@@ -1059,7 +1051,7 @@
 
     <span class="gds-mini-desc">
 
-      Akses cepat dari layar utama HP
+      Akses cepat dari HP
 
     </span>
 
