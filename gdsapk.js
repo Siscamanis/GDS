@@ -1,16 +1,21 @@
 /**
  * ============================================================
- * GADUNSLOT Miniapp
+ * GADUNSLOT — MINI APP HEADER REPLACER V2
+ * ============================================================
+ * Mobile First
+ * Replace APK Default
+ * No Delay
+ * No Tracker
+ * No Analytics
+ * No External Competitor Link
+ * ============================================================
  */
 
 (function () {
   "use strict";
 
-  /* ==========================================================
-     CONFIG
-  ========================================================== */
-
-  var GDS_CONFIG = {
+  var CONFIG = {
+    brand: "GADUNSLOT",
 
     logo:
       "https://lh3.googleusercontent.com/d/13TskwJwScDxKXjdrb-k9ThYRWUBhMK0B",
@@ -19,45 +24,84 @@
       "https://slot.gadunslot-miniapp.xyz/",
 
     dismissKey:
-      "gds_miniapp_header_dismiss",
+      "gds_miniapp_dismiss_today",
 
     mobileWidth:
       1024
-
   };
 
 
   /* ==========================================================
-     MOBILE CHECK
+     PRE-HIDE
+     Jalankan SEKETIKA script dibaca.
+     APK asli tidak sempat kelihatan.
   ========================================================== */
 
-  function gdsIsMobile() {
+  (function injectPreHide() {
+
+    if (
+      document.getElementById(
+        "gds-miniapp-prehide"
+      )
+    ) {
+      return;
+    }
+
+    var style =
+      document.createElement("style");
+
+    style.id =
+      "gds-miniapp-prehide";
+
+    style.textContent = `
+
+      @media (max-width:${CONFIG.mobileWidth}px) {
+
+        #download_apk_notification:not(
+          [data-gds-miniapp="1"]
+        ) {
+          display:none !important;
+        }
+
+      }
+
+    `;
+
+    (
+      document.head ||
+      document.documentElement
+    ).appendChild(style);
+
+  })();
+
+
+  /* ==========================================================
+     DEVICE
+  ========================================================== */
+
+  function isMobile() {
 
     return window.matchMedia(
       "(max-width:" +
-      GDS_CONFIG.mobileWidth +
+      CONFIG.mobileWidth +
       "px)"
     ).matches;
 
   }
 
 
-  /* ==========================================================
-     STANDALONE CHECK
-  ========================================================== */
-
-  function gdsIsStandalone() {
+  function isStandalone() {
 
     return (
 
       window.navigator.standalone === true ||
 
       window.matchMedia(
-        "(display-mode: standalone)"
+        "(display-mode:standalone)"
       ).matches ||
 
       window.matchMedia(
-        "(display-mode: fullscreen)"
+        "(display-mode:fullscreen)"
       ).matches
 
     );
@@ -66,42 +110,32 @@
 
 
   /* ==========================================================
-     CLOSE TODAY CHECK
+     DISMISS
   ========================================================== */
 
-  function gdsDismissedToday() {
+  function dismissedToday() {
 
     try {
 
       var saved =
         localStorage.getItem(
-          GDS_CONFIG.dismissKey
+          CONFIG.dismissKey
         );
-
 
       if (!saved) {
         return false;
       }
 
-
-      var savedDate =
+      return (
         new Date(
           Number(saved)
-        );
-
-
-      var today =
-        new Date();
-
-
-      return (
-        savedDate.toDateString() ===
-        today.toDateString()
+        ).toDateString() ===
+        new Date().toDateString()
       );
 
     }
 
-    catch (err) {
+    catch (e) {
 
       return false;
 
@@ -110,35 +144,117 @@
   }
 
 
-  /* ==========================================================
-     SAVE CLOSE
-  ========================================================== */
-
-  function gdsSaveDismiss() {
+  function saveDismiss() {
 
     try {
 
       localStorage.setItem(
-        GDS_CONFIG.dismissKey,
+        CONFIG.dismissKey,
         String(Date.now())
       );
 
     }
 
-    catch (err) {}
+    catch (e) {}
 
   }
 
 
   /* ==========================================================
-     CSS
+     HILANGKAN SPACE BAWAAN WEBSITE
   ========================================================== */
 
-  function gdsInjectStyle() {
+  function clearOriginalLayoutSpace() {
+
+    if (!document.body) {
+      return;
+    }
+
+    /*
+     * INI BAGIAN PENTING.
+     *
+     * Website asli menggunakan class ini
+     * untuk menyediakan space notification.
+     *
+     * Kalau hanya display:none,
+     * space bisa tetap tertinggal.
+     */
+
+    document.body.classList.remove(
+      "has-apk-download-notification"
+    );
+
+  }
+
+
+  function collapseNotification(el) {
+
+    if (!el) {
+      return;
+    }
+
+    el.style.setProperty(
+      "display",
+      "none",
+      "important"
+    );
+
+    el.style.setProperty(
+      "height",
+      "0",
+      "important"
+    );
+
+    el.style.setProperty(
+      "min-height",
+      "0",
+      "important"
+    );
+
+    el.style.setProperty(
+      "max-height",
+      "0",
+      "important"
+    );
+
+    el.style.setProperty(
+      "padding",
+      "0",
+      "important"
+    );
+
+    el.style.setProperty(
+      "margin",
+      "0",
+      "important"
+    );
+
+    el.style.setProperty(
+      "border",
+      "0",
+      "important"
+    );
+
+    el.style.setProperty(
+      "overflow",
+      "hidden",
+      "important"
+    );
+
+    clearOriginalLayoutSpace();
+
+  }
+
+
+  /* ==========================================================
+     STYLE
+  ========================================================== */
+
+  function injectMainStyle() {
 
     if (
       document.getElementById(
-        "gds-miniapp-header-style"
+        "gds-miniapp-main-style"
       )
     ) {
       return;
@@ -150,351 +266,390 @@
 
 
     style.id =
-      "gds-miniapp-header-style";
+      "gds-miniapp-main-style";
 
 
     style.textContent = `
 
-/* ============================================================
-   GADUNSLOT MINI APP HEADER
-============================================================ */
+/* ==========================================================
+   ROOT — MENGGUNAKAN CONTAINER APK ASLI
+========================================================== */
 
-#download_apk_notification[data-gds-miniapp="1"] {
+#download_apk_notification[
+  data-gds-miniapp="1"
+] {
 
-  position: relative !important;
+  display:flex !important;
 
-  display: flex !important;
+  align-items:center !important;
 
-  align-items: center !important;
+  position:relative !important;
 
-  width: 100% !important;
+  width:100% !important;
 
-  min-height: 62px !important;
+  min-height:60px !important;
 
-  margin: 0 !important;
+  height:auto !important;
+
+  max-height:none !important;
+
+  margin:0 !important;
 
   padding:
-    calc(7px + env(safe-area-inset-top, 0px))
+    calc(
+      7px +
+      env(
+        safe-area-inset-top,
+        0px
+      )
+    )
     10px
-    7px !important;
+    7px
+    !important;
 
-  border: 0 !important;
+  border:0 !important;
 
-  border-radius: 0 !important;
+  overflow:hidden !important;
 
-  background:
-    linear-gradient(
-      110deg,
-      #03170b 0%,
-      #073619 48%,
-      #062811 100%
-    ) !important;
+  border-radius:0 !important;
 
-  box-shadow:
-    0 4px 14px
-    rgba(0,0,0,.32) !important;
-
-  overflow: hidden !important;
-
-  z-index: 99999 !important;
+  box-sizing:border-box !important;
 
   font-family:
     Arial,
     Helvetica,
-    sans-serif !important;
+    sans-serif
+    !important;
+
+  background:
+    linear-gradient(
+      110deg,
+      #020f07 0%,
+      #07371a 48%,
+      #041f0e 100%
+    )
+    !important;
+
+  box-shadow:
+    0 4px 14px
+    rgba(0,0,0,.30)
+    !important;
+
+  z-index:999999 !important;
 
 }
 
 
-/* LIGHT EFFECT */
+/* GLOW */
 
-#download_apk_notification[data-gds-miniapp="1"]::before {
+#download_apk_notification[
+  data-gds-miniapp="1"
+]::before {
 
-  content: "";
+  content:"";
 
-  position: absolute;
+  position:absolute;
 
-  width: 150px;
+  width:150px;
 
-  height: 90px;
+  height:100px;
 
-  left: -30px;
+  left:-30px;
 
-  top: -35px;
+  top:-45px;
 
-  border-radius: 50%;
+  border-radius:50%;
 
   background:
-    rgba(39,255,105,.13);
+    rgba(
+      31,
+      255,
+      103,
+      .14
+    );
 
   filter:
     blur(30px);
 
-  pointer-events: none;
+  pointer-events:none;
 
 }
 
 
-/* ============================================================
-   WRAPPER
-============================================================ */
+/* ==========================================================
+   INNER
+========================================================== */
 
 #gdsMiniAppHeader {
 
-  position: relative;
+  position:relative;
 
-  display: flex;
+  z-index:2;
 
-  align-items: center;
+  width:100%;
 
-  width: 100%;
+  display:flex;
 
-  gap: 9px;
+  align-items:center;
 
-  z-index: 2;
+  gap:9px;
 
 }
 
 
-/* ============================================================
+/* ==========================================================
    LOGO
-============================================================ */
+========================================================== */
 
-.gds-header-logo {
+.gds-mini-logo {
 
-  width: 48px;
+  width:47px;
 
-  height: 48px;
+  height:47px;
 
   flex:
-    0 0 48px;
+    0 0 47px;
 
-  display: flex;
+  display:flex;
 
-  align-items: center;
+  align-items:center;
 
-  justify-content: center;
+  justify-content:center;
 
-  overflow: hidden;
+  border-radius:11px;
 
-  border-radius: 11px;
+  overflow:hidden;
 
   background:
-    linear-gradient(
-      145deg,
-      #104e24,
-      #041b0c
+    #06180b;
+
+  box-shadow:
+
+    0 3px 10px
+    rgba(
+      0,
+      0,
+      0,
+      .35
+    ),
+
+    inset
+    0 0 0 1px
+    rgba(
+      255,
+      255,
+      255,
+      .08
     );
 
-  box-shadow:
-    0 3px 10px
-    rgba(0,0,0,.35),
-    inset 0 0 0 1px
-    rgba(255,255,255,.09);
+}
+
+
+.gds-mini-logo img {
+
+  width:100%;
+
+  height:100%;
+
+  display:block;
+
+  object-fit:contain;
 
 }
 
 
-.gds-header-logo img {
+/* ==========================================================
+   COPY
+========================================================== */
 
-  display: block;
+.gds-mini-copy {
 
-  width: 100%;
+  min-width:0;
 
-  height: 100%;
-
-  object-fit: contain;
-
-}
-
-
-/* ============================================================
-   TEXT
-============================================================ */
-
-.gds-header-copy {
-
-  flex: 1;
-
-  min-width: 0;
+  flex:1;
 
 }
 
 
-.gds-header-title {
+.gds-mini-title {
 
-  display: block;
+  display:block;
 
-  margin: 0 0 3px !important;
+  margin:0 0 3px !important;
 
-  padding: 0 !important;
+  padding:0 !important;
 
-  color: #ffffff !important;
+  font-size:13.5px !important;
 
-  font-size: 14px !important;
+  font-weight:800 !important;
 
-  font-weight: 800 !important;
+  line-height:1.15 !important;
 
-  line-height: 1.15 !important;
+  color:#fff !important;
 
-  white-space: nowrap;
+  white-space:nowrap;
 
 }
 
 
-.gds-header-title strong {
+.gds-mini-title strong {
+
+  color:#77ff9d;
+
+}
+
+
+.gds-mini-desc {
+
+  display:block;
+
+  margin:0 !important;
+
+  padding:0 !important;
+
+  font-size:10px !important;
+
+  line-height:1.25 !important;
+
+  font-weight:400 !important;
 
   color:
-    #78ff9d !important;
+    rgba(
+      255,
+      255,
+      255,
+      .72
+    )
+    !important;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  white-space:nowrap;
 
 }
 
 
-.gds-header-sub {
+/* ==========================================================
+   ACTIONS
+========================================================== */
 
-  display: block;
+.gds-mini-actions {
 
-  margin: 0 !important;
+  display:flex;
 
-  padding: 0 !important;
+  align-items:center;
 
-  color:
-    rgba(255,255,255,.70) !important;
+  flex-shrink:0;
 
-  font-size: 10.5px !important;
-
-  font-weight: 400 !important;
-
-  line-height: 1.25 !important;
-
-  overflow: hidden;
-
-  white-space: nowrap;
-
-  text-overflow: ellipsis;
+  gap:6px;
 
 }
 
 
-/* ============================================================
-   ACTION
-============================================================ */
+/* ==========================================================
+   RGB ROTATE
+========================================================== */
 
-.gds-header-actions {
+.gds-mini-rgb {
 
-  display: flex;
+  position:relative;
 
-  align-items: center;
+  padding:2px;
 
-  gap: 6px;
+  overflow:hidden;
 
-  flex-shrink: 0;
+  border-radius:10px;
 
-}
-
-
-/* ============================================================
-   RGB FRAME
-============================================================ */
-
-.gds-install-rgb {
-
-  position: relative;
-
-  padding: 2px;
-
-  border-radius: 10px;
-
-  overflow: hidden;
-
-  isolation: isolate;
-
-  box-shadow:
-    0 0 9px
-    rgba(0,255,100,.18);
+  isolation:isolate;
 
 }
 
 
-.gds-install-rgb::before {
+.gds-mini-rgb::before {
 
-  content: "";
+  content:"";
 
-  position: absolute;
+  position:absolute;
 
-  width: 200%;
+  width:220%;
 
-  height: 400%;
+  height:400%;
 
-  top: 50%;
+  top:50%;
 
-  left: 50%;
+  left:50%;
 
   background:
 
     conic-gradient(
 
-      from 0deg,
+      #00ff66,
 
-      #00ff59,
+      #eaff00,
 
-      #cfff00,
+      #ffd900,
 
-      #ffe600,
+      #ff6a00,
 
-      #ff7600,
+      #ff006a,
 
-      #ff0059,
+      #bb00ff,
 
-      #c000ff,
-
-      #006cff,
+      #006eff,
 
       #00eaff,
 
-      #00ff59
+      #00ff66
 
     );
 
   transform:
-    translate(-50%,-50%)
+    translate(
+      -50%,
+      -50%
+    )
     rotate(0deg);
 
   animation:
-    gdsHeaderRgb
+    gdsRGBSpin
     1.6s
     linear
     infinite;
 
-  z-index: -2;
+  z-index:-2;
 
 }
 
 
-.gds-install-rgb::after {
+.gds-mini-rgb::after {
 
-  content: "";
+  content:"";
 
-  position: absolute;
+  position:absolute;
 
-  inset: 2px;
+  inset:2px;
 
-  border-radius: 8px;
+  border-radius:8px;
 
   background:
-    #07572a;
+    #076b31;
 
-  z-index: -1;
+  z-index:-1;
 
 }
 
 
-@keyframes gdsHeaderRgb {
+@keyframes gdsRGBSpin {
 
   from {
 
     transform:
-      translate(-50%,-50%)
+      translate(
+        -50%,
+        -50%
+      )
       rotate(0deg);
 
   }
@@ -502,7 +657,10 @@
   to {
 
     transform:
-      translate(-50%,-50%)
+      translate(
+        -50%,
+        -50%
+      )
       rotate(360deg);
 
   }
@@ -510,186 +668,169 @@
 }
 
 
-/* ============================================================
-   INSTALL BUTTON
-============================================================ */
+/* ==========================================================
+   INSTALL
+========================================================== */
 
-.gds-header-install {
+.gds-mini-install {
 
-  position: relative;
+  display:flex !important;
 
-  z-index: 5;
+  align-items:center !important;
 
-  display: flex !important;
+  justify-content:center !important;
 
-  align-items: center !important;
+  gap:4px;
 
-  justify-content: center !important;
+  height:33px;
 
-  gap: 4px;
+  min-width:75px;
 
-  height: 34px;
-
-  min-width: 77px;
+  margin:0 !important;
 
   padding:
-    0 10px !important;
+    0 9px !important;
 
-  margin: 0 !important;
+  border:0 !important;
 
-  border: 0 !important;
-
-  border-radius:
-    8px !important;
+  border-radius:8px !important;
 
   background:
+
     linear-gradient(
       180deg,
-      #1ab655,
-      #08772f
-    ) !important;
+      #19b853,
+      #08752f
+    )
+    !important;
+
+  color:#fff !important;
+
+  text-decoration:none !important;
+
+  font-size:10px !important;
+
+  line-height:1 !important;
+
+  font-weight:800 !important;
 
   box-shadow:
+
     inset
     0 1px 0
-    rgba(255,255,255,.25);
+    rgba(
+      255,
+      255,
+      255,
+      .24
+    );
 
-  color:
-    #ffffff !important;
-
-  text-decoration:
-    none !important;
-
-  font-size:
-    10.5px !important;
-
-  line-height:
-    1 !important;
-
-  font-weight:
-    800 !important;
-
-  cursor: pointer;
+  cursor:pointer;
 
   -webkit-tap-highlight-color:
     transparent;
 
-  transition:
-    transform .13s ease;
-
 }
 
 
-.gds-header-install:active {
+.gds-mini-install:active {
 
   transform:
-    scale(.94);
+    scale(.95);
 
 }
 
 
-.gds-header-install svg {
+.gds-mini-install svg {
 
-  width: 14px;
+  width:14px;
 
-  height: 14px;
-
-  flex-shrink: 0;
+  height:14px;
 
 }
 
 
-/* ============================================================
+/* ==========================================================
    CLOSE
-============================================================ */
+========================================================== */
 
-.gds-header-close {
+.gds-mini-close {
 
-  appearance: none;
+  width:27px;
 
-  -webkit-appearance: none;
-
-  width: 27px;
-
-  height: 27px;
+  height:27px;
 
   flex:
     0 0 27px;
 
-  display: flex;
+  display:flex;
 
-  align-items: center;
+  align-items:center;
 
-  justify-content: center;
+  justify-content:center;
 
-  margin: 0 !important;
+  margin:0 !important;
 
-  padding: 0 !important;
+  padding:0 !important;
 
-  border:
-    0 !important;
+  border:0 !important;
 
-  border-radius:
-    50%;
+  border-radius:50%;
 
   background:
-    rgba(255,255,255,.07);
+    rgba(
+      255,
+      255,
+      255,
+      .07
+    );
 
   color:
-    rgba(255,255,255,.72);
+    rgba(
+      255,
+      255,
+      255,
+      .75
+    );
 
-  font-size:
-    19px;
+  font-size:19px;
 
-  line-height:
-    1;
+  line-height:1;
 
-  cursor: pointer;
-
-  -webkit-tap-highlight-color:
-    transparent;
+  cursor:pointer;
 
 }
 
 
-.gds-header-close:active {
+/* ==========================================================
+   SMALL PHONE
+========================================================== */
 
-  background:
-    rgba(255,255,255,.16);
+@media(max-width:375px) {
 
-  color:
-    #ffffff;
-
-}
-
-
-/* ============================================================
-   SMALL MOBILE
-============================================================ */
-
-@media(max-width: 375px) {
-
-  #download_apk_notification[data-gds-miniapp="1"] {
+  #download_apk_notification[
+    data-gds-miniapp="1"
+  ] {
 
     padding:
-      6px 7px !important;
+      6px 7px
+      !important;
 
   }
 
 
-  .gds-header-logo {
+  .gds-mini-logo {
 
-    width: 43px;
+    width:42px;
 
-    height: 43px;
+    height:42px;
 
-    flex-basis:
-      43px;
+    flex-basis:42px;
 
   }
 
 
-  .gds-header-title {
+  .gds-mini-title {
 
     font-size:
       12px !important;
@@ -697,47 +838,45 @@
   }
 
 
-  .gds-header-sub {
+  .gds-mini-desc {
 
-    max-width:
-      120px;
+    max-width:110px;
 
     font-size:
-      9.5px !important;
+      9px !important;
 
   }
 
 
-  .gds-header-install {
+  .gds-mini-install {
 
-    height:
-      31px;
+    height:31px;
 
-    min-width:
-      67px;
+    min-width:67px;
 
     padding:
-      0 7px !important;
+      0 7px
+      !important;
 
     font-size:
-      9.5px !important;
+      9px !important;
 
   }
-
 
 }
 
 
-/* ============================================================
-   DESKTOP SAFETY
-============================================================ */
+/* ==========================================================
+   DESKTOP
+========================================================== */
 
-@media(min-width: 1025px) {
+@media(min-width:1025px) {
 
-  #download_apk_notification[data-gds-miniapp="1"] {
+  #download_apk_notification[
+    data-gds-miniapp="1"
+  ] {
 
-    display:
-      none !important;
+    display:none !important;
 
   }
 
@@ -755,40 +894,63 @@
 
 
   /* ==========================================================
-     REPLACE ORIGINAL APK
+     REPLACE
   ========================================================== */
 
-  function gdsReplaceOriginalApp() {
+  function replaceDefaultApp() {
 
-    /*
-     * Element bawaan website:
-     *
-     * #download_apk_notification
-     *
-     * Kita TIDAK membuat element baru.
-     * Kita mengganti isi element bawaan.
-     */
+    if (!isMobile()) {
+      return false;
+    }
 
-    var original =
+
+    var el =
       document.getElementById(
         "download_apk_notification"
       );
 
 
-    if (!original) {
-
+    if (!el) {
       return false;
+    }
+
+
+    /*
+     * Kalau sudah install PWA:
+     * sembunyikan notification total.
+     */
+
+    if (isStandalone()) {
+
+      collapseNotification(el);
+
+      return true;
 
     }
 
 
     /*
-     * Jika sudah diubah,
-     * jangan buat ulang.
+     * Kalau member sudah close hari ini:
+     * tetap sembunyikan dan PASTIKAN
+     * tidak ada blank space.
+     */
+
+    if (dismissedToday()) {
+
+      collapseNotification(el);
+
+      return true;
+
+    }
+
+
+    /*
+     * Kalau sudah berhasil replace,
+     * tidak perlu replace ulang.
      */
 
     if (
-      original.getAttribute(
+      el.getAttribute(
         "data-gds-miniapp"
       ) === "1"
     ) {
@@ -798,102 +960,93 @@
     }
 
 
-    /*
-     * MOBILE ONLY
-     */
-
-    if (!gdsIsMobile()) {
-
-      return false;
-
-    }
+    injectMainStyle();
 
 
     /*
-     * Kalau sudah dibuka sebagai PWA,
-     * sembunyikan aplikasi bawaan juga.
+     * PERTAHANKAN CLASS APK BAWAAN.
+     *
+     * Jangan className = ...
+     *
+     * Dengan cara ini struktur header
+     * tetap mengikuti sistem website.
      */
 
-    if (gdsIsStandalone()) {
-
-      original.style.setProperty(
-        "display",
-        "none",
-        "important"
-      );
-
-      return true;
-
-    }
+    el.classList.add(
+      "gds-miniapp-replaced"
+    );
 
 
-    /*
-     * Jika ditutup hari ini,
-     * sembunyikan APK default.
-     */
-
-    if (gdsDismissedToday()) {
-
-      original.style.setProperty(
-        "display",
-        "none",
-        "important"
-      );
-
-      return true;
-
-    }
-
-
-    /*
-     * Tandai sebagai GDS
-     */
-
-    original.setAttribute(
+    el.setAttribute(
       "data-gds-miniapp",
       "1"
     );
 
 
     /*
-     * HAPUS CLASS BAWAAN
-     * supaya CSS APK lama tidak ikut campur.
+     * Bersihkan kemungkinan style
+     * dari proses hide sebelumnya.
      */
 
-    original.className =
-      "gds-miniapp-replaced";
+    el.style.removeProperty(
+      "display"
+    );
+
+    el.style.removeProperty(
+      "height"
+    );
+
+    el.style.removeProperty(
+      "min-height"
+    );
+
+    el.style.removeProperty(
+      "max-height"
+    );
+
+    el.style.removeProperty(
+      "padding"
+    );
+
+    el.style.removeProperty(
+      "margin"
+    );
+
+    el.style.removeProperty(
+      "overflow"
+    );
 
 
     /*
-     * TIMPA HTML APK BAWAAN
+     * TIMPA APK DEFAULT
      */
 
-    original.innerHTML = `
+    el.innerHTML = `
 
 <div id="gdsMiniAppHeader">
 
 
-  <div class="gds-header-logo">
+  <div class="gds-mini-logo">
 
     <img
 
-      src="${GDS_CONFIG.logo}"
+      src="${CONFIG.logo}"
 
       alt="GADUNSLOT"
 
-      width="48"
+      width="47"
 
-      height="48"
+      height="47"
 
     >
 
   </div>
 
 
-  <div class="gds-header-copy">
+  <div class="gds-mini-copy">
 
 
-    <span class="gds-header-title">
+    <span class="gds-mini-title">
 
       Install
 
@@ -904,9 +1057,27 @@
     </span>
 
 
-    <span class="gds-header-sub">
+    <span class="gds-mini-desc">
 
-      Akses cepat langsung dari layar utama HP
+      Akses cepat dari layar utama HP
+
+    </span>
+
+
+    <!--
+      Dipertahankan ID-nya supaya
+      kompatibel dengan struktur default.
+    -->
+
+    <span
+
+      id="dont_show_again_today"
+
+      style="display:none"
+
+    >
+
+      Jangan tampilkan lagi hari ini
 
     </span>
 
@@ -914,23 +1085,28 @@
   </div>
 
 
-  <div class="gds-header-actions">
+  <div class="gds-mini-actions">
 
 
-    <div class="gds-install-rgb">
+    <div class="gds-mini-rgb">
 
 
       <a
 
-        href="${GDS_CONFIG.miniApp}"
+        href="${CONFIG.miniApp}"
 
-        class="gds-header-install"
+        class="
+          download-btn
+          gds-mini-install
+        "
 
         target="_blank"
 
         rel="noopener noreferrer"
 
-        aria-label="Install GADUNSLOT Mini App"
+        aria-label="
+          Install GADUNSLOT Mini App
+        "
 
       >
 
@@ -953,11 +1129,17 @@
 
         >
 
-          <path d="M12 3v12"></path>
+          <path
+            d="M12 3v12"
+          ></path>
 
-          <path d="M7 11l5 5 5-5"></path>
+          <path
+            d="M7 11l5 5 5-5"
+          ></path>
 
-          <path d="M4 21h16"></path>
+          <path
+            d="M4 21h16"
+          ></path>
 
         </svg>
 
@@ -971,11 +1153,23 @@
     </div>
 
 
-    <button
+    <!--
+      ID CLOSE BAWAAN DIPERTAHANKAN
+    -->
 
-      type="button"
+    <span
 
-      class="gds-header-close"
+      id="
+        close_download_apk_notification
+      "
+
+      class="
+        btn-close
+        float-end
+        gds-mini-close
+      "
+
+      role="button"
 
       aria-label="Tutup"
 
@@ -983,7 +1177,7 @@
 
       ×
 
-    </button>
+    </span>
 
 
   </div>
@@ -995,28 +1189,25 @@
 
 
     /*
-     * FORCE DISPLAY
+     * CLOSE CUSTOM
+     *
+     * Ini menjamin space ikut hilang
+     * walaupun handler website asli
+     * tidak bekerja.
      */
 
-    original.style.removeProperty(
-      "display"
-    );
-
-
-    /*
-     * CLOSE BUTTON
-     */
-
-    var closeBtn =
-      original.querySelector(
-        ".gds-header-close"
+    var close =
+      el.querySelector(
+        "#close_download_apk_notification"
       );
 
 
-    if (closeBtn) {
+    if (close) {
 
-      closeBtn.addEventListener(
+      close.addEventListener(
+
         "click",
+
         function (event) {
 
           event.preventDefault();
@@ -1024,16 +1215,17 @@
           event.stopPropagation();
 
 
-          gdsSaveDismiss();
+          saveDismiss();
 
 
-          original.style.setProperty(
-            "display",
-            "none",
-            "important"
+          collapseNotification(
+            el
           );
 
-        }
+        },
+
+        true
+
       );
 
     }
@@ -1045,54 +1237,73 @@
 
 
   /* ==========================================================
-     INIT
+     WATCH DOM TANPA DELAY
   ========================================================== */
 
-  function gdsInit() {
-
-    if (!gdsIsMobile()) {
-
-      return;
-
-    }
-
-
-    gdsInjectStyle();
-
+  function watchImmediately() {
 
     /*
-     * Coba langsung.
+     * Kalau element sudah ada,
+     * langsung replace sekarang.
      */
 
-    gdsReplaceOriginalApp();
+    replaceDefaultApp();
 
 
     /*
-     * Website bisa React / AJAX / hydration.
+     * Kalau HTML website belum sampai
+     * ke banner APK, MutationObserver
+     * menangkap saat elemen masuk DOM.
      *
-     * Kalau website membuat ulang
-     * APK default, script GDS akan
-     * timpa lagi.
+     * Tidak ada setTimeout.
      */
 
     var observer =
       new MutationObserver(
         function () {
 
-          var apk =
+          var el =
             document.getElementById(
               "download_apk_notification"
             );
 
 
+          if (!el) {
+            return;
+          }
+
+
+          /*
+           * Kalau close hari ini,
+           * cegah website membuka lagi.
+           */
+
           if (
-            apk &&
-            apk.getAttribute(
+            dismissedToday() ||
+            isStandalone()
+          ) {
+
+            collapseNotification(
+              el
+            );
+
+            return;
+
+          }
+
+
+          /*
+           * Jika website render ulang APK,
+           * timpa lagi langsung.
+           */
+
+          if (
+            el.getAttribute(
               "data-gds-miniapp"
             ) !== "1"
           ) {
 
-            gdsReplaceOriginalApp();
+            replaceDefaultApp();
 
           }
 
@@ -1101,39 +1312,43 @@
 
 
     observer.observe(
+
       document.documentElement,
+
       {
-
-        childList: true,
-
-        subtree: true
-
+        childList:true,
+        subtree:true,
+        attributes:true,
+        attributeFilter:[
+          "class"
+        ]
       }
+
     );
 
   }
 
 
-  /* ==========================================================
-     BOOT
-  ========================================================== */
+  /*
+   * LANGSUNG jalan.
+   *
+   * Tidak:
+   * - DOMContentLoaded delay
+   * - window.load
+   * - setTimeout
+   */
 
-  if (
-    document.readyState ===
-    "loading"
-  ) {
+  watchImmediately();
 
-    document.addEventListener(
-      "DOMContentLoaded",
-      gdsInit
-    );
 
-  }
+  /*
+   * Backup untuk halaman
+   * yang kembali dari cache browser.
+   */
 
-  else {
-
-    gdsInit();
-
-  }
+  window.addEventListener(
+    "pageshow",
+    replaceDefaultApp
+  );
 
 })();
