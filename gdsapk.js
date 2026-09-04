@@ -1,1 +1,965 @@
-(()=>{"use strict";const C={logo:"https://lh3.googleusercontent.com/d/13TskwJwScDxKXjdrb-k9ThYRWUBhMK0B",url:"https://slot.gadunslot-miniapp.xyz/",key:"gds_miniapp_dismiss_today",mw:1024};const M=()=>matchMedia(`(max-width:${C.mw}px)`).matches,S=()=>navigator.standalone===true||matchMedia("(display-mode:standalone)").matches||matchMedia("(display-mode:fullscreen)").matches,D=()=>{try{const e=localStorage.getItem(C.key);return!!e&&new Date(+e).toDateString()===new Date().toDateString()}catch(e){return false}},V=()=>{try{localStorage.setItem(C.key,String(Date.now()))}catch(e){}},B=()=>{document.body&&document.body.classList.remove("has-apk-download-notification")},H=e=>{if(!e)return;["display","height","min-height","max-height","padding","margin","border","overflow"].forEach(t=>{const i=t==="display"?"none":t==="overflow"?"hidden":"0";e.style.setProperty(t,i,"important")});B()};if(!document.getElementById("gds-prehide")){const e=document.createElement("style");e.id="gds-prehide",e.textContent=`@media(max-width:${C.mw}px){#download_apk_notification:not([data-gds-miniapp="1"]){display:none!important}}`,(document.head||document.documentElement).appendChild(e)}function I(){if(document.getElementById("gds-style"))return;const e=document.createElement("style");e.id="gds-style",e.textContent=`#download_apk_notification[data-gds-miniapp="1"]{position:relative!important;display:flex!important;align-items:center!important;width:100%!important;min-height:60px!important;height:auto!important;max-height:none!important;margin:0!important;padding:7px 10px!important;border:0!important;border-radius:0!important;overflow:hidden!important;box-sizing:border-box!important;background:linear-gradient(110deg,#020f07,#07371a 48%,#041f0e)!important;box-shadow:0 4px 14px rgba(0,0,0,.3)!important;font-family:Arial,Helvetica,sans-serif!important;z-index:2147483640!important;pointer-events:auto!important}#download_apk_notification[data-gds-miniapp="1"] *{box-sizing:border-box;pointer-events:auto!important}#download_apk_notification[data-gds-miniapp="1"]::before{content:"";position:absolute;width:150px;height:100px;left:-30px;top:-45px;border-radius:50%;background:rgba(31,255,103,.14);filter:blur(30px);pointer-events:none!important}.gds-h{position:relative!important;z-index:2147483641!important;width:100%;display:flex;align-items:center;gap:9px;pointer-events:auto!important}.gds-logo{width:47px;height:47px;flex:0 0 47px;display:flex;align-items:center;justify-content:center;border-radius:11px;overflow:hidden;background:#06180b;pointer-events:none!important}.gds-logo img{width:100%;height:100%;display:block;object-fit:contain;pointer-events:none!important}.gds-copy{min-width:0;flex:1;pointer-events:none!important}.gds-title{display:block;margin:0 0 3px!important;padding:0!important;color:#fff!important;font-size:13.5px!important;font-weight:800!important;line-height:1.15!important;white-space:nowrap;pointer-events:none!important}.gds-title strong{color:#77ff9d}.gds-desc{display:block;margin:0!important;padding:0!important;color:rgba(255,255,255,.72)!important;font-size:10px!important;line-height:1.25!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none!important}.gds-actions{position:relative!important;z-index:2147483646!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:7px!important;flex:0 0 auto!important;pointer-events:auto!important}.gds-rgb{position:relative!important;z-index:2147483646!important;padding:2px!important;border-radius:10px!important;overflow:hidden!important;isolation:isolate!important;pointer-events:auto!important}.gds-rgb::before{content:"";position:absolute;width:220%;height:400%;top:50%;left:50%;background:conic-gradient(#00ff66,#eaff00,#ffd900,#ff6a00,#ff006a,#bb00ff,#006eff,#00eaff,#00ff66);transform:translate(-50%,-50%);animation:gdsRGB 1.6s linear infinite;z-index:-2;pointer-events:none!important}.gds-rgb::after{content:"";position:absolute;inset:2px;border-radius:8px;background:#076b31;z-index:-1;pointer-events:none!important}@keyframes gdsRGB{to{transform:translate(-50%,-50%) rotate(360deg)}}#gdsInstallBtn{position:relative!important;z-index:2147483647!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;height:33px!important;min-width:76px!important;margin:0!important;padding:0 9px!important;border:0!important;border-radius:8px!important;background:linear-gradient(180deg,#19b853,#08752f)!important;color:#fff!important;font-family:Arial,sans-serif!important;font-size:10px!important;font-weight:800!important;line-height:1!important;cursor:pointer!important;pointer-events:auto!important;touch-action:manipulation!important;-webkit-appearance:none!important;appearance:none!important;-webkit-tap-highlight-color:transparent!important}#gdsInstallBtn svg{width:14px;height:14px;pointer-events:none!important}#gdsCloseBtn{position:relative!important;z-index:2147483647!important;width:30px!important;height:30px!important;min-width:30px!important;flex:0 0 30px!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:rgba(255,255,255,.12)!important;color:#fff!important;font-family:Arial,sans-serif!important;font-size:20px!important;line-height:1!important;cursor:pointer!important;pointer-events:auto!important;touch-action:manipulation!important;-webkit-appearance:none!important;appearance:none!important;-webkit-tap-highlight-color:transparent!important}@media(max-width:375px){#download_apk_notification[data-gds-miniapp="1"]{padding:6px 7px!important}.gds-logo{width:42px;height:42px;flex-basis:42px}.gds-title{font-size:12px!important}.gds-desc{max-width:108px;font-size:9px!important}#gdsInstallBtn{height:31px!important;min-width:67px!important;padding:0 7px!important;font-size:9px!important}#gdsCloseBtn{width:28px!important;height:28px!important;min-width:28px!important;flex-basis:28px!important}}@media(min-width:1025px){#download_apk_notification[data-gds-miniapp="1"]{display:none!important}}`,(document.head||document.documentElement).appendChild(e)}function R(){if(!M())return false;const e=document.getElementById("download_apk_notification");if(!e)return false;if(S()||D())return H(e),true;if(e.dataset.gdsMiniapp==="1")return true;I(),e.dataset.gdsMiniapp="1",["display","height","min-height","max-height","padding","margin","border","overflow","pointer-events"].forEach(t=>e.style.removeProperty(t)),e.innerHTML=`<div class="gds-h"><div class="gds-logo"><img src="${C.logo}" alt="GADUNSLOT"></div><div class="gds-copy"><span class="gds-title">Mini App <strong>GADUNSLOT</strong></span><span class="gds-desc">Akses cepat dari HP</span></div><div class="gds-actions"><div class="gds-rgb"><button id="gdsInstallBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 11l5 5 5-5"></path><path d="M4 21h16"></path></svg>INSTALL</button></div><button id="gdsCloseBtn" type="button" aria-label="Tutup">×</button></div></div>`;const t=e.querySelector("#gdsInstallBtn"),i=e.querySelector("#gdsCloseBtn");return t&&t.addEventListener("click",e=>{e.preventDefault(),e.stopImmediatePropagation(),window.location.href=C.url},true),t&&t.addEventListener("touchend",e=>{e.preventDefault(),e.stopImmediatePropagation(),window.location.href=C.url},{capture:true,passive:false}),i&&i.addEventListener("click",t=>{t.preventDefault(),t.stopImmediatePropagation(),V(),H(e)},true),i&&i.addEventListener("touchend",t=>{t.preventDefault(),t.stopImmediatePropagation(),V(),H(e)},{capture:true,passive:false}),true}R();new MutationObserver(()=>{const e=document.getElementById("download_apk_notification");e&&(D()||S()?H(e):e.dataset.gdsMiniapp!=="1"&&R())}).observe(document.documentElement,{childList:true,subtree:true});window.addEventListener("pageshow",R)})();
+(()=>{
+"use strict";
+
+const C={
+    logo:"https://lh3.googleusercontent.com/d/13TskwJwScDxKXjdrb-k9ThYRWUBhMK0B",
+    url:"https://slot.gadunslot-miniapp.xyz/",
+    key:"gds_miniapp_dismiss_today",
+    mw:1024
+};
+
+const M=()=>matchMedia(`(max-width:${C.mw}px)`).matches;
+
+const S=()=>(
+    navigator.standalone===true ||
+    matchMedia("(display-mode:standalone)").matches ||
+    matchMedia("(display-mode:fullscreen)").matches
+);
+
+const D=()=>{
+    try{
+        const e=localStorage.getItem(C.key);
+        return !!e &&
+        new Date(+e).toDateString()===new Date().toDateString();
+    }catch(e){
+        return false;
+    }
+};
+
+const V=()=>{
+    try{
+        localStorage.setItem(C.key,String(Date.now()));
+    }catch(e){}
+};
+
+const B=()=>{
+    document.body &&
+    document.body.classList.remove("has-apk-download-notification");
+};
+
+const H=e=>{
+    if(!e)return;
+
+    [
+        "display",
+        "height",
+        "min-height",
+        "max-height",
+        "padding",
+        "margin",
+        "border",
+        "overflow"
+    ].forEach(t=>{
+        const i=
+            t==="display" ? "none" :
+            t==="overflow" ? "hidden" :
+            "0";
+
+        e.style.setProperty(t,i,"important");
+    });
+
+    B();
+};
+
+
+/* =====================================================
+   PRE-HIDE ORIGINAL APK NOTIFICATION
+===================================================== */
+
+if(!document.getElementById("gds-prehide")){
+
+    const e=document.createElement("style");
+
+    e.id="gds-prehide";
+
+    e.textContent=`
+    @media(max-width:${C.mw}px){
+
+        #download_apk_notification:not([data-gds-miniapp="1"]){
+            display:none!important;
+        }
+
+    }
+    `;
+
+    (document.head||document.documentElement).appendChild(e);
+}
+
+
+/* =====================================================
+   STYLE
+===================================================== */
+
+function I(){
+
+    if(document.getElementById("gds-style"))return;
+
+    const e=document.createElement("style");
+
+    e.id="gds-style";
+
+    e.textContent=`
+
+#download_apk_notification[data-gds-miniapp="1"]{
+
+    position:relative!important;
+
+    display:flex!important;
+
+    align-items:center!important;
+
+    width:100%!important;
+
+    min-height:60px!important;
+
+    height:auto!important;
+
+    max-height:none!important;
+
+    margin:0!important;
+
+    padding:7px 10px!important;
+
+    border:0!important;
+
+    border-radius:0!important;
+
+    overflow:hidden!important;
+
+    box-sizing:border-box!important;
+
+    background:
+    linear-gradient(
+        110deg,
+        #020f07,
+        #07371a 48%,
+        #041f0e
+    )!important;
+
+    box-shadow:
+    0 4px 14px rgba(0,0,0,.3)!important;
+
+    font-family:
+    Arial,
+    Helvetica,
+    sans-serif!important;
+
+    z-index:2147483640!important;
+
+    pointer-events:auto!important;
+}
+
+
+#download_apk_notification[data-gds-miniapp="1"] *{
+
+    box-sizing:border-box;
+
+    pointer-events:auto!important;
+}
+
+
+#download_apk_notification[data-gds-miniapp="1"]::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:150px;
+
+    height:100px;
+
+    left:-30px;
+
+    top:-45px;
+
+    border-radius:50%;
+
+    background:
+    rgba(31,255,103,.14);
+
+    filter:blur(30px);
+
+    pointer-events:none!important;
+}
+
+
+/* MAIN */
+
+.gds-h{
+
+    position:relative!important;
+
+    z-index:2147483641!important;
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    pointer-events:auto!important;
+}
+
+
+/* LOGO */
+
+.gds-logo{
+
+    width:47px;
+
+    height:47px;
+
+    flex:0 0 47px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:11px;
+
+    overflow:hidden;
+
+    background:#06180b;
+
+    pointer-events:none!important;
+}
+
+
+.gds-logo img{
+
+    width:100%;
+
+    height:100%;
+
+    display:block;
+
+    object-fit:contain;
+
+    pointer-events:none!important;
+}
+
+
+/* TEXT */
+
+.gds-copy{
+
+    min-width:0;
+
+    flex:1;
+
+    pointer-events:none!important;
+}
+
+
+.gds-title{
+
+    display:block;
+
+    margin:0 0 3px!important;
+
+    padding:0!important;
+
+    color:#fff!important;
+
+    font-size:13.5px!important;
+
+    font-weight:800!important;
+
+    line-height:1.15!important;
+
+    white-space:nowrap;
+
+    pointer-events:none!important;
+}
+
+
+.gds-title strong{
+
+    color:#77ff9d;
+
+}
+
+
+.gds-desc{
+
+    display:block;
+
+    margin:0!important;
+
+    padding:0!important;
+
+    color:rgba(255,255,255,.72)!important;
+
+    font-size:10px!important;
+
+    line-height:1.25!important;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    pointer-events:none!important;
+}
+
+
+/* ACTION */
+
+.gds-actions{
+
+    position:relative!important;
+
+    z-index:2147483646!important;
+
+    display:flex!important;
+
+    align-items:center!important;
+
+    justify-content:flex-end!important;
+
+    gap:7px!important;
+
+    flex:0 0 auto!important;
+
+    pointer-events:auto!important;
+}
+
+
+/* RGB BORDER */
+
+.gds-rgb{
+
+    position:relative!important;
+
+    z-index:2147483646!important;
+
+    padding:2px!important;
+
+    border-radius:10px!important;
+
+    overflow:hidden!important;
+
+    isolation:isolate!important;
+
+    pointer-events:auto!important;
+}
+
+
+.gds-rgb::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:220%;
+
+    height:400%;
+
+    top:50%;
+
+    left:50%;
+
+    background:
+    conic-gradient(
+        #00ff66,
+        #eaff00,
+        #ffd900,
+        #ff6a00,
+        #ff006a,
+        #bb00ff,
+        #006eff,
+        #00eaff,
+        #00ff66
+    );
+
+    transform:
+    translate(-50%,-50%);
+
+    animation:
+    gdsRGB 1.6s linear infinite;
+
+    z-index:-2;
+
+    pointer-events:none!important;
+}
+
+
+.gds-rgb::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:2px;
+
+    border-radius:8px;
+
+    background:#076b31;
+
+    z-index:-1;
+
+    pointer-events:none!important;
+}
+
+
+@keyframes gdsRGB{
+
+    to{
+
+        transform:
+        translate(-50%,-50%)
+        rotate(360deg);
+
+    }
+
+}
+
+
+/* INSTALL BUTTON */
+
+#gdsInstallBtn{
+
+    position:relative!important;
+
+    z-index:2147483647!important;
+
+    display:flex!important;
+
+    align-items:center!important;
+
+    justify-content:center!important;
+
+    gap:4px!important;
+
+    height:33px!important;
+
+    min-width:76px!important;
+
+    margin:0!important;
+
+    padding:0 9px!important;
+
+    border:0!important;
+
+    border-radius:8px!important;
+
+    background:
+    linear-gradient(
+        180deg,
+        #19b853,
+        #08752f
+    )!important;
+
+    color:#fff!important;
+
+    font-family:
+    Arial,
+    sans-serif!important;
+
+    font-size:10px!important;
+
+    font-weight:800!important;
+
+    line-height:1!important;
+
+    cursor:pointer!important;
+
+    pointer-events:auto!important;
+
+    touch-action:manipulation!important;
+
+    -webkit-appearance:none!important;
+
+    appearance:none!important;
+
+    -webkit-tap-highlight-color:
+    transparent!important;
+}
+
+
+#gdsInstallBtn svg{
+
+    width:14px;
+
+    height:14px;
+
+    pointer-events:none!important;
+}
+
+
+/* CLOSE BUTTON */
+
+#gdsCloseBtn{
+
+    position:relative!important;
+
+    z-index:2147483647!important;
+
+    width:30px!important;
+
+    height:30px!important;
+
+    min-width:30px!important;
+
+    flex:0 0 30px!important;
+
+    display:flex!important;
+
+    align-items:center!important;
+
+    justify-content:center!important;
+
+    margin:0!important;
+
+    padding:0!important;
+
+    border:0!important;
+
+    border-radius:50%!important;
+
+    background:
+    rgba(255,255,255,.12)!important;
+
+    color:#fff!important;
+
+    font-family:
+    Arial,
+    sans-serif!important;
+
+    font-size:20px!important;
+
+    line-height:1!important;
+
+    cursor:pointer!important;
+
+    pointer-events:auto!important;
+
+    touch-action:manipulation!important;
+
+    -webkit-appearance:none!important;
+
+    appearance:none!important;
+
+    -webkit-tap-highlight-color:
+    transparent!important;
+}
+
+
+/* SMALL MOBILE */
+
+@media(max-width:375px){
+
+    #download_apk_notification[data-gds-miniapp="1"]{
+
+        padding:
+        6px 7px!important;
+
+    }
+
+    .gds-logo{
+
+        width:42px;
+
+        height:42px;
+
+        flex-basis:42px;
+
+    }
+
+    .gds-title{
+
+        font-size:
+        12px!important;
+
+    }
+
+    .gds-desc{
+
+        max-width:108px;
+
+        font-size:
+        9px!important;
+
+    }
+
+    #gdsInstallBtn{
+
+        height:
+        31px!important;
+
+        min-width:
+        67px!important;
+
+        padding:
+        0 7px!important;
+
+        font-size:
+        9px!important;
+
+    }
+
+    #gdsCloseBtn{
+
+        width:
+        28px!important;
+
+        height:
+        28px!important;
+
+        min-width:
+        28px!important;
+
+        flex-basis:
+        28px!important;
+
+    }
+
+}
+
+
+/* DESKTOP HIDE */
+
+@media(min-width:1025px){
+
+    #download_apk_notification[data-gds-miniapp="1"]{
+
+        display:none!important;
+
+    }
+
+}
+
+`;
+
+    (document.head||document.documentElement).appendChild(e);
+}
+
+
+/* =====================================================
+   RENDER MINI APP BAR
+===================================================== */
+
+function R(){
+
+    if(!M())return false;
+
+    const e=
+    document.getElementById(
+        "download_apk_notification"
+    );
+
+    if(!e)return false;
+
+
+    /* SUDAH MINI APP / DITUTUP HARI INI */
+
+    if(S()||D()){
+
+        H(e);
+
+        return true;
+    }
+
+
+    if(e.dataset.gdsMiniapp==="1")
+        return true;
+
+
+    I();
+
+
+    e.dataset.gdsMiniapp="1";
+
+
+    [
+        "display",
+        "height",
+        "min-height",
+        "max-height",
+        "padding",
+        "margin",
+        "border",
+        "overflow",
+        "pointer-events"
+    ].forEach(t=>
+        e.style.removeProperty(t)
+    );
+
+
+    /* HTML */
+
+    e.innerHTML=`
+
+    <div class="gds-h">
+
+        <div class="gds-logo">
+
+            <img
+            src="${C.logo}"
+            alt="GADUNSLOT">
+
+        </div>
+
+
+        <div class="gds-copy">
+
+            <span class="gds-title">
+
+                Mini App
+                <strong>
+                    GADUNSLOT
+                </strong>
+
+            </span>
+
+
+            <span class="gds-desc">
+
+                Akses cepat dari HP
+
+            </span>
+
+        </div>
+
+
+        <div class="gds-actions">
+
+
+            <div class="gds-rgb">
+
+                <button
+                id="gdsInstallBtn"
+                type="button">
+
+                    <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+
+                        <path d="M12 3v12"></path>
+
+                        <path d="M7 11l5 5 5-5"></path>
+
+                        <path d="M4 21h16"></path>
+
+                    </svg>
+
+                    INSTALL
+
+                </button>
+
+            </div>
+
+
+            <button
+            id="gdsCloseBtn"
+            type="button"
+            aria-label="Tutup">
+
+                ×
+
+            </button>
+
+        </div>
+
+    </div>
+
+    `;
+
+
+    const t=
+    e.querySelector(
+        "#gdsInstallBtn"
+    );
+
+
+    const i=
+    e.querySelector(
+        "#gdsCloseBtn"
+    );
+
+
+    /* =================================================
+       INSTALL BUTTON
+       OPEN MINI APP IN NEW TAB
+    ================================================= */
+
+    const openMiniApp=event=>{
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+        event.stopImmediatePropagation();
+
+
+        /*
+         * Membuka Mini App di tab baru.
+         * Karena dipanggil langsung dari click user,
+         * browser biasanya mengizinkan tab baru.
+         */
+
+        const newTab=
+        window.open(
+            C.url,
+            "_blank"
+        );
+
+
+        /*
+         * Security:
+         * putuskan referensi opener jika tersedia.
+         */
+
+        if(newTab){
+
+            try{
+
+                newTab.opener=null;
+
+            }catch(err){}
+
+        }else{
+
+            /*
+             * FALLBACK
+             * Jika browser memblokir tab baru,
+             * buka Mini App di tab sekarang.
+             */
+
+            window.location.href=
+            C.url;
+
+        }
+
+    };
+
+
+    if(t){
+
+        /*
+         * Cukup pakai CLICK.
+         *
+         * Di perangkat touch,
+         * browser tetap menghasilkan click.
+         *
+         * Tidak memakai touchend agar
+         * tidak berisiko membuka 2 tab.
+         */
+
+        t.addEventListener(
+            "click",
+            openMiniApp,
+            true
+        );
+
+    }
+
+
+    /* =================================================
+       CLOSE BUTTON
+    ================================================= */
+
+    if(i){
+
+        i.addEventListener(
+            "click",
+            event=>{
+
+                event.preventDefault();
+
+                event.stopImmediatePropagation();
+
+                V();
+
+                H(e);
+
+            },
+            true
+        );
+
+
+        i.addEventListener(
+            "touchend",
+            event=>{
+
+                event.preventDefault();
+
+                event.stopImmediatePropagation();
+
+                V();
+
+                H(e);
+
+            },
+            {
+                capture:true,
+                passive:false
+            }
+        );
+
+    }
+
+
+    return true;
+}
+
+
+/* INITIAL RUN */
+
+R();
+
+
+/* =====================================================
+   OBSERVER
+===================================================== */
+
+new MutationObserver(()=>{
+
+    const e=
+    document.getElementById(
+        "download_apk_notification"
+    );
+
+
+    if(e){
+
+        if(D()||S()){
+
+            H(e);
+
+        }else if(
+            e.dataset.gdsMiniapp!=="1"
+        ){
+
+            R();
+
+        }
+
+    }
+
+}).observe(
+    document.documentElement,
+    {
+        childList:true,
+        subtree:true
+    }
+);
+
+
+/* PAGE RESTORE */
+
+window.addEventListener(
+    "pageshow",
+    R
+);
+
+})();
