@@ -1,7 +1,10 @@
 "use strict";
 
 (function () {
-    var STYLE_ID = "gds-header-rain-style-v3";
+    var STYLE_ID = "gds-header-rain-style-v4";
+
+    /* Hindari memasang style berulang kali */
+    if (document.getElementById(STYLE_ID)) return;
 
     var CSS = `
 .site-header {
@@ -58,11 +61,6 @@
             transparent 75%
         ),
         radial-gradient(
-            1.4px 1.4px at 110px 54px,
-            var(--gds-gold) 100%,
-            transparent 150%
-        ),
-        radial-gradient(
             1.5px 42px at 45px 70px,
             var(--gds-gold),
             transparent 75%
@@ -71,11 +69,6 @@
             1.5px 42px at 245px 70px,
             var(--gds-gold),
             transparent 75%
-        ),
-        radial-gradient(
-            1.2px 1.2px at 145px 49px,
-            var(--gds-green) 100%,
-            transparent 150%
         );
 
     background-size:
@@ -84,14 +77,12 @@
         160px 135px,
         180px 155px,
         180px 155px,
-        180px 155px,
-        200px 145px,
         200px 145px,
         200px 145px;
 
-    opacity: 0.75;
-    filter: brightness(1.2);
-    animation: gdsHeaderRain 16s linear infinite;
+    opacity: 0.72;
+    will-change: background-position;
+    animation: gdsHeaderRain 12s linear infinite;
 }
 
 .site-header::after {
@@ -102,17 +93,16 @@
     pointer-events: none;
 
     background-image: radial-gradient(
-        circle at 50% 50%,
-        transparent 0,
-        transparent 1.5px,
-        rgba(0, 12, 6, 0.58) 2px
+        circle,
+        transparent 0 1.5px,
+        rgba(0, 12, 6, 0.42) 2px
     );
 
     background-size: 7px 7px;
-    opacity: 0.48;
+    opacity: 0.42;
 
-    backdrop-filter: blur(4px) brightness(1.25);
-    -webkit-backdrop-filter: blur(4px) brightness(1.25);
+    /* Lebih ringan dibanding backdrop-filter */
+    box-shadow: inset 0 -12px 20px rgba(0, 0, 0, 0.25);
 }
 
 .site-header > .container {
@@ -123,8 +113,7 @@
 .site-header .logo {
     position: relative !important;
     z-index: 4 !important;
-    background-image: none !important;
-    background-color: transparent !important;
+    background: transparent !important;
 }
 
 .site-header .logo::before,
@@ -133,17 +122,13 @@
     display: none !important;
 }
 
-.site-header .logo img {
-    position: relative !important;
-    z-index: 5 !important;
-}
-
+.site-header .logo img,
 .site-header .menu-slide,
 .site-header .top-menu,
 .site-header .top-menu > li,
 .site-header .top-menu > li > a {
-    position: relative;
-    z-index: 5;
+    position: relative !important;
+    z-index: 5 !important;
 }
 
 .site-header .game-list {
@@ -153,28 +138,24 @@
 @keyframes gdsHeaderRain {
     from {
         background-position:
-            0 -300px,
-            0 -300px,
-            0 -300px,
-            25px -450px,
-            25px -450px,
-            25px -450px,
-            60px -380px,
-            60px -380px,
-            60px -380px;
+            0 -270px,
+            0 -270px,
+            0 -270px,
+            25px -350px,
+            25px -350px,
+            60px -320px,
+            60px -320px;
     }
 
     to {
         background-position:
-            0 900px,
-            0 900px,
-            0 900px,
-            25px 1100px,
-            25px 1100px,
-            25px 1100px,
-            60px 1000px,
-            60px 1000px,
-            60px 1000px;
+            0 810px,
+            0 810px,
+            0 810px,
+            25px 930px,
+            25px 930px,
+            60px 870px,
+            60px 870px;
     }
 }
 
@@ -186,15 +167,15 @@
 
 @media (min-width: 992px) {
     .site-header {
-        height: 110px !important;
-        min-height: 110px !important;
-        max-height: 110px !important;
+        height: 100px !important;
+        min-height: 100px !important;
+        max-height: 100px !important;
     }
 
     .site-header::before,
     .site-header::after {
-        height: 110px !important;
-        max-height: 110px !important;
+        height: 100px !important;
+        max-height: 100px !important;
     }
 
     .site-header .logo {
@@ -203,35 +184,16 @@
 }
 `;
 
-    function installHeaderStyle() {
-        var styleElement = document.getElementById(STYLE_ID);
+    var styleElement = document.createElement("style");
+    styleElement.id = STYLE_ID;
+    styleElement.type = "text/css";
+    styleElement.textContent = CSS;
 
-        if (!styleElement) {
-            styleElement = document.createElement("style");
-            styleElement.id = STYLE_ID;
-            styleElement.type = "text/css";
+    /* Langsung dipasang tanpa menunggu DOMContentLoaded */
+    var target =
+        document.head ||
+        document.getElementsByTagName("head")[0] ||
+        document.documentElement;
 
-            var target =
-                document.head ||
-                document.getElementsByTagName("head")[0] ||
-                document.documentElement;
-
-            target.appendChild(styleElement);
-        }
-
-        /* Memperbarui style yang sama, tidak membuat duplikat */
-        if (styleElement.textContent !== CSS) {
-            styleElement.textContent = CSS;
-        }
-    }
-
-    if (document.readyState === "loading") {
-        document.addEventListener(
-            "DOMContentLoaded",
-            installHeaderStyle,
-            { once: true }
-        );
-    } else {
-        installHeaderStyle();
-    }
+    target.appendChild(styleElement);
 })();
