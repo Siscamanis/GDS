@@ -1,17 +1,17 @@
 "use strict";
 
 (function () {
-    var STYLE_ID = "gds-header-premium-v7";
+    var STYLE_ID = "gds-header-premium-v8";
     var MIRROR_CLASS = "gds-premium-mirror";
 
-    /*
-     * Hapus versi style lama agar tidak bentrok.
-     */
+    /* Hapus semua versi lama agar tidak bentrok */
     [
         "gds-header-rain-style-v3",
         "gds-header-rain-style-v4",
         "gds-header-premium-style-v5",
-        "gds-mirror-fix-v6"
+        "gds-mirror-fix-v6",
+        "gds-header-premium-v7",
+        "gds-mobile-burger-hotfix-v8"
     ].forEach(function (id) {
         var oldStyle = document.getElementById(id);
 
@@ -24,8 +24,8 @@
 
     var CSS = `
 /* =====================================================
-   GADUNSLOT — PREMIUM HEADER V7
-   Rain + Mirror Sweep + Logo Glow + Gold Border
+   GADUNSLOT — PREMIUM HEADER V8
+   Aman untuk tombol burger dan menu mobile
 ===================================================== */
 
 .site-header {
@@ -71,7 +71,7 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-    pointer-events: none;
+    pointer-events: none !important;
 
     background-image:
         radial-gradient(
@@ -126,15 +126,15 @@
 }
 
 /* =====================================================
-   TEKSTUR GELAP PREMIUM
+   TEKSTUR PREMIUM
 ===================================================== */
 
 .site-header::after {
     content: "";
     position: absolute;
     inset: 0;
-    z-index: 1;
-    pointer-events: none;
+    z-index: 0;
+    pointer-events: none !important;
 
     background-image:
         radial-gradient(
@@ -161,34 +161,40 @@
 }
 
 /* =====================================================
-   ELEMEN MIRROR KHUSUS
+   MIRROR SWEEP
 ===================================================== */
 
 .site-header .gds-premium-mirror {
     position: absolute !important;
     inset: 0 !important;
-    z-index: 2 !important;
+    z-index: 1 !important;
+
     display: block !important;
     overflow: hidden !important;
-    pointer-events: none !important;
+
     opacity: 1 !important;
     visibility: visible !important;
+
+    pointer-events: none !important;
+    touch-action: none !important;
 }
 
-/* Cahaya mirror utama */
+/* Cahaya mirror lebar */
 .site-header .gds-premium-mirror::before {
     content: "";
     position: absolute;
-    top: -30%;
-    bottom: -30%;
-    left: -34%;
-    width: 22%;
+    top: -35%;
+    bottom: -35%;
+    left: -35%;
+    width: 23%;
+
+    pointer-events: none !important;
 
     background: linear-gradient(
         105deg,
         transparent 0%,
         rgba(255, 255, 255, 0.02) 20%,
-        rgba(223, 186, 76, 0.18) 38%,
+        rgba(223, 186, 76, 0.19) 38%,
         rgba(255, 255, 255, 0.62) 50%,
         rgba(0, 230, 118, 0.20) 62%,
         transparent 100%
@@ -201,17 +207,19 @@
     transform: translateX(0) skewX(-18deg);
     will-change: transform, opacity;
 
-    animation: gdsPremiumMirrorMove 6.5s ease-in-out infinite;
+    animation: gdsPremiumMirrorMove 7s ease-in-out infinite;
 }
 
-/* Kilau putih tipis */
+/* Garis mirror tipis */
 .site-header .gds-premium-mirror::after {
     content: "";
     position: absolute;
-    top: -20%;
-    bottom: -20%;
+    top: -25%;
+    bottom: -25%;
     left: -20%;
     width: 5%;
+
+    pointer-events: none !important;
 
     background: linear-gradient(
         90deg,
@@ -221,48 +229,51 @@
     );
 
     filter: blur(2px);
+
     transform: translateX(0) skewX(-18deg);
     will-change: transform, opacity;
 
-    animation: gdsPremiumMirrorLine 6.5s ease-in-out infinite;
+    animation: gdsPremiumMirrorLine 7s ease-in-out infinite;
 }
 
 /* =====================================================
-   KONTEN HEADER
+   KONTEN UTAMA HEADER
+   Hanya container yang dinaikkan lapisannya.
+   Posisi burger dan menu tidak diubah.
 ===================================================== */
 
 .site-header > .container {
     position: relative !important;
-    z-index: 4 !important;
-}
-
-.site-header > *:not(.gds-premium-mirror) {
-    position: relative !important;
-    z-index: 4 !important;
+    z-index: 3 !important;
 }
 
 /* =====================================================
-   LOGO DAN GLOW
+   LOGO DAN EMERALD GLOW
 ===================================================== */
 
 .site-header .logo {
     position: relative !important;
-    z-index: 5 !important;
+    z-index: 4 !important;
     isolation: isolate;
-    background: transparent !important;
+
+    background-image: none !important;
+    background-color: transparent !important;
 }
 
-/* Cahaya emerald di belakang logo */
+/* Glow di belakang logo */
 .site-header .logo::before {
     content: "" !important;
     display: block !important;
+
     position: absolute;
     left: 50%;
     top: 50%;
+
     width: 135%;
     height: 90%;
+
     z-index: -1;
-    pointer-events: none;
+    pointer-events: none !important;
 
     border-radius: 50%;
 
@@ -275,37 +286,24 @@
 
     filter: blur(12px);
     will-change: opacity, transform;
+
     animation: gdsLogoGlow 4.5s ease-in-out infinite;
 }
 
+/* Nonaktifkan efek logo bawaan bagian belakang */
 .site-header .logo::after {
     content: none !important;
     display: none !important;
+    pointer-events: none !important;
 }
 
 .site-header .logo img {
     position: relative !important;
-    z-index: 6 !important;
+    z-index: 5 !important;
 
     filter:
         drop-shadow(0 3px 4px rgba(0, 0, 0, 0.48))
         drop-shadow(0 0 5px rgba(0, 230, 118, 0.12));
-}
-
-/* =====================================================
-   MENU
-===================================================== */
-
-.site-header .menu-slide,
-.site-header .top-menu,
-.site-header .top-menu > li,
-.site-header .top-menu > li > a {
-    position: relative !important;
-    z-index: 6 !important;
-}
-
-.site-header .game-list {
-    z-index: 9999 !important;
 }
 
 /* =====================================================
@@ -337,7 +335,7 @@
 }
 
 /* =====================================================
-   ANIMASI MIRROR UTAMA
+   ANIMASI MIRROR LEBAR
 ===================================================== */
 
 @keyframes gdsPremiumMirrorMove {
@@ -351,7 +349,7 @@
         opacity: 0.92;
     }
 
-    55% {
+    52% {
         opacity: 0.72;
     }
 
@@ -449,26 +447,41 @@
 
 /* =====================================================
    MOBILE
+   Tidak mengubah posisi burger dan menu
 ===================================================== */
 
 @media (max-width: 991px) {
     .site-header::before {
-        opacity: 0.56;
+        opacity: 0.54;
         animation-duration: 15s;
     }
 
     .site-header .gds-premium-mirror::before {
         width: 28%;
-        animation-duration: 8.5s;
+        animation-duration: 9s;
     }
 
     .site-header .gds-premium-mirror::after {
         width: 7%;
-        animation-duration: 8.5s;
+        animation-duration: 9s;
     }
 
     .site-header .logo::before {
         filter: blur(9px);
+    }
+
+    /*
+     * Memastikan elemen dekorasi tidak menghalangi
+     * sentuhan pada tombol burger.
+     */
+    .site-header::before,
+    .site-header::after,
+    .site-header .gds-premium-mirror,
+    .site-header .gds-premium-mirror::before,
+    .site-header .gds-premium-mirror::after,
+    .site-header .logo::before,
+    .site-header .logo::after {
+        pointer-events: none !important;
     }
 }
 
@@ -509,22 +522,32 @@
 
         if (!header) return false;
 
-        var oldMirrors = header.querySelectorAll(
-            ".gds-premium-mirror"
+        /*
+         * Hapus mirror lama untuk mencegah duplikasi.
+         */
+        var mirrors = header.querySelectorAll(
+            "." + MIRROR_CLASS
         );
 
-        if (oldMirrors.length > 1) {
-            for (var i = 1; i < oldMirrors.length; i++) {
-                oldMirrors[i].remove();
+        if (mirrors.length > 1) {
+            for (var i = 1; i < mirrors.length; i++) {
+                mirrors[i].remove();
             }
         }
 
+        /*
+         * Buat mirror apabila belum tersedia.
+         */
         if (!header.querySelector("." + MIRROR_CLASS)) {
             var mirrorElement = document.createElement("div");
 
             mirrorElement.className = MIRROR_CLASS;
             mirrorElement.setAttribute("aria-hidden", "true");
 
+            /*
+             * Dipasang sebagai elemen pertama supaya selalu
+             * berada di belakang isi header dan tombol burger.
+             */
             header.insertBefore(
                 mirrorElement,
                 header.firstChild
@@ -536,12 +559,14 @@
 
     installStyle();
 
-    /* Pasang mirror langsung jika header sudah tersedia */
+    /*
+     * Pasang langsung jika header sudah tersedia.
+     */
     if (installMirror()) return;
 
     /*
-     * Jika template website membuat header setelah JS dijalankan,
-     * MutationObserver akan menunggu sampai header tersedia.
+     * Menunggu header jika website membuatnya
+     * setelah halaman mulai dimuat.
      */
     var observer = new MutationObserver(function () {
         if (installMirror()) {
@@ -554,7 +579,9 @@
         subtree: true
     });
 
-    /* Hentikan observer setelah 20 detik */
+    /*
+     * Hentikan pengamatan setelah 20 detik.
+     */
     setTimeout(function () {
         observer.disconnect();
     }, 20000);
