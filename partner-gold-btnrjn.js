@@ -11,8 +11,9 @@
   const LOGO_URL =
     "https://lh3.googleusercontent.com/d/1jCS32ToIndVkGBIv1ChO5djkwKUOAnOS";
 
+  // POSISI TOMBOL
   const RIGHT = 18;
-  const BOTTOM = 100;
+  const BOTTOM = 140;
   const SIZE = 55;
 
   // LOGIC ASLI TETAP
@@ -21,7 +22,7 @@
 
   const PARTNER_STORAGE = "partnerBtnHideUntil";
 
-  // TEXT ASLI — TIDAK DIUBAH
+  // TEXT ASLI — JANGAN DIUBAH
   const TEXTS = [
     "SEKTE💲",
     "SLOT🎰",
@@ -40,6 +41,7 @@
   let textIndex = 0;
   let textTimer = null;
 
+
   function injectStyle() {
     if (document.getElementById(STYLE_ID)) return;
 
@@ -47,255 +49,267 @@
     style.id = STYLE_ID;
 
     style.textContent = `
+      /* =========================================
+         DEFAULT
+      ========================================= */
+
       #${BTN_ID} {
-        display:none!important;
+        display: none !important;
       }
 
-      @media(max-width:768px){
 
-        #${BTN_ID}{
-          position:fixed!important;
+      /* =========================================
+         MOBILE ONLY
+      ========================================= */
 
-          width:${SIZE}px!important;
-          height:${SIZE}px!important;
+      @media (max-width: 768px) {
 
-          right:${RIGHT}px!important;
-          bottom:${BOTTOM}px!important;
+        #${BTN_ID} {
+          position: fixed !important;
 
-          border-radius:50%!important;
-          overflow:visible!important;
+          width: ${SIZE}px !important;
+          height: ${SIZE}px !important;
 
-          box-sizing:border-box!important;
+          right: ${RIGHT}px !important;
+          bottom: ${BOTTOM}px !important;
 
-          z-index:999999!important;
+          border-radius: 50% !important;
 
-          display:flex!important;
-          align-items:center!important;
-          justify-content:center!important;
+          overflow: visible !important;
+
+          box-sizing: border-box !important;
+
+          display: flex !important;
+
+          align-items: center !important;
+          justify-content: center !important;
 
           background:
             radial-gradient(
-              circle at 30% 25%,
-              rgba(255,255,255,.24) 0%,
-              rgba(255,120,0,.28) 20%,
-              rgba(210,0,0,.72) 52%,
-              rgba(40,0,0,.97) 100%
-            )!important;
+              circle at 32% 25%,
+              rgba(255,255,255,.25) 0%,
+              rgba(255,120,30,.28) 20%,
+              rgba(210,0,0,.78) 55%,
+              rgba(35,0,0,.98) 100%
+            ) !important;
 
-          border:none!important;
-          outline:none!important;
+          border: none !important;
+          outline: none !important;
 
-          cursor:pointer!important;
-          text-decoration:none!important;
+          z-index: 999999 !important;
 
-          -webkit-tap-highlight-color:transparent!important;
+          cursor: pointer !important;
+
+          text-decoration: none !important;
+
+          -webkit-tap-highlight-color: transparent !important;
 
           box-shadow:
             inset 0 2px 4px rgba(255,255,255,.22),
-            inset 0 -5px 9px rgba(0,0,0,.58),
+            inset 0 -5px 9px rgba(0,0,0,.60),
             0 0 7px rgba(255,0,0,.95),
-            0 0 15px rgba(255,50,0,.75),
-            0 0 28px rgba(255,80,0,.42),
-            0 0 45px rgba(180,0,0,.22)!important;
+            0 0 15px rgba(255,45,0,.70),
+            0 0 28px rgba(255,70,0,.38) !important;
 
           animation:
-            dragonButtonPulse 1.8s ease-in-out infinite;
+            rjnDragonPulse 1.8s ease-in-out infinite;
         }
 
 
-        /* =====================================
-           RING API NAGA / DRAGON
-        ===================================== */
+        #${BTN_ID}:focus,
+        #${BTN_ID}:active,
+        #${BTN_ID}:visited {
+          outline: none !important;
+          text-decoration: none !important;
+          -webkit-tap-highlight-color: transparent !important;
+        }
 
-        #${BTN_ID}::before{
-          content:"";
 
-          position:absolute;
+        /* =========================================
+           RING MERAH / API BERPUTAR
+        ========================================= */
 
-          inset:-5px;
+        #${BTN_ID}::before {
+          content: "";
 
-          border-radius:50%;
+          position: absolute;
 
-          padding:3px;
+          inset: -5px;
+
+          border-radius: 50%;
+
+          padding: 3px;
 
           background:
             conic-gradient(
               from 0deg,
-              #450000 0deg,
-              #b00000 35deg,
-              #ff0000 75deg,
-              #ff5a00 115deg,
-              #ffb300 150deg,
-              #ff2800 195deg,
-              #b40000 235deg,
-              #ff0000 280deg,
-              #ff7000 325deg,
-              #450000 360deg
+              #650000,
+              #ff0000,
+              #ff3b00,
+              #ff9d00,
+              #ff1600,
+              #8b0000,
+              #ff0000,
+              #ff6500,
+              #650000
             );
 
           -webkit-mask:
             linear-gradient(#fff 0 0) content-box,
             linear-gradient(#fff 0 0);
 
-          -webkit-mask-composite:xor;
-          mask-composite:exclude;
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
 
           animation:
-            dragonRingSpin 2.2s linear infinite;
+            rjnDragonRing 2.2s linear infinite;
 
-          pointer-events:none;
+          pointer-events: none;
 
-          z-index:5;
+          z-index: 5;
 
           filter:
             drop-shadow(0 0 3px rgba(255,0,0,.95))
             drop-shadow(0 0 7px rgba(255,50,0,.85))
-            drop-shadow(0 0 13px rgba(255,100,0,.55));
-
-          will-change:transform;
+            drop-shadow(0 0 12px rgba(255,100,0,.50));
         }
 
 
-        /* =====================================
+        /* =========================================
            FIRE GLOW
-        ===================================== */
+        ========================================= */
 
-        #${BTN_ID}::after{
-          content:"";
+        #${BTN_ID}::after {
+          content: "";
 
-          position:absolute;
+          position: absolute;
 
-          inset:-14px;
+          inset: -13px;
 
-          border-radius:50%;
+          border-radius: 50%;
 
           background:
             radial-gradient(
               circle,
-              rgba(255,0,0,.48) 0%,
-              rgba(255,50,0,.30) 32%,
-              rgba(255,110,0,.15) 52%,
-              rgba(255,0,0,.04) 68%,
-              transparent 78%
+              rgba(255,0,0,.45) 0%,
+              rgba(255,55,0,.26) 35%,
+              rgba(255,100,0,.12) 55%,
+              rgba(255,0,0,0) 76%
             );
 
-          filter:blur(5px);
+          filter: blur(5px);
 
-          pointer-events:none;
+          pointer-events: none;
 
-          z-index:1;
+          z-index: 1;
 
           animation:
-            dragonFireGlow 1.4s ease-in-out infinite;
+            rjnFireGlow 1.5s ease-in-out infinite;
         }
 
 
-        /* =====================================
-           GIF RJN TETAP
-        ===================================== */
+        /* =========================================
+           GIF RJN — TETAP
+        ========================================= */
 
-        #${BTN_ID} img{
-          position:relative!important;
+        #${BTN_ID} img {
+          position: relative !important;
 
-          width:72%!important;
-          height:72%!important;
+          width: 72% !important;
+          height: 72% !important;
 
-          object-fit:contain!important;
+          object-fit: contain !important;
 
-          pointer-events:none!important;
+          pointer-events: none !important;
 
-          z-index:8!important;
+          z-index: 8 !important;
 
           filter:
-            drop-shadow(0 0 3px rgba(255,255,255,.80))
+            drop-shadow(0 0 4px rgba(255,255,255,.80))
             drop-shadow(0 0 6px rgba(255,0,0,.95))
-            drop-shadow(0 0 10px rgba(255,80,0,.75))
-            drop-shadow(0 0 14px rgba(255,30,0,.40))!important;
-
-          animation:
-            dragonImageGlow 1.8s ease-in-out infinite;
+            drop-shadow(0 0 10px rgba(255,70,0,.70)) !important;
         }
 
 
-        /* =====================================
-           BUBBLE / OXYGEN PARTICLES
-        ===================================== */
+        /* =========================================
+           BUBBLE / OXYGEN
+        ========================================= */
 
-        #${BTN_ID} .dragon-bubble{
-          position:absolute!important;
+        #${BTN_ID} .rjn-bubble {
+          position: absolute !important;
 
-          bottom:8px!important;
+          bottom: 7px !important;
 
-          width:4px!important;
-          height:4px!important;
+          border-radius: 50% !important;
 
-          border-radius:50%!important;
+          pointer-events: none !important;
+
+          z-index: 6 !important;
+
+          opacity: 0;
 
           background:
             radial-gradient(
-              circle at 30% 30%,
-              #fff,
-              #ffb000 35%,
-              #ff3c00 70%,
-              rgba(255,0,0,0) 100%
-            )!important;
+              circle at 30% 25%,
+              rgba(255,255,255,.95) 0%,
+              rgba(255,190,100,.85) 22%,
+              rgba(255,70,0,.65) 55%,
+              rgba(255,0,0,0) 78%
+            ) !important;
 
           box-shadow:
-            0 0 4px rgba(255,80,0,.95),
-            0 0 8px rgba(255,0,0,.70)!important;
-
-          pointer-events:none!important;
-
-          z-index:6!important;
-
-          opacity:0;
+            0 0 4px rgba(255,90,0,.90),
+            0 0 8px rgba(255,0,0,.55) !important;
 
           animation:
-            dragonBubbleRise 2.8s linear infinite;
-        }
-
-        #${BTN_ID} .dragon-bubble:nth-of-type(2){
-          left:18%!important;
-          animation-delay:.2s!important;
-          animation-duration:2.5s!important;
-        }
-
-        #${BTN_ID} .dragon-bubble:nth-of-type(3){
-          left:37%!important;
-          width:3px!important;
-          height:3px!important;
-          animation-delay:1s!important;
-          animation-duration:3.1s!important;
-        }
-
-        #${BTN_ID} .dragon-bubble:nth-of-type(4){
-          left:57%!important;
-          width:5px!important;
-          height:5px!important;
-          animation-delay:.6s!important;
-          animation-duration:2.7s!important;
-        }
-
-        #${BTN_ID} .dragon-bubble:nth-of-type(5){
-          left:75%!important;
-          width:3px!important;
-          height:3px!important;
-          animation-delay:1.4s!important;
-          animation-duration:3.3s!important;
+            rjnBubbleRise 2.7s ease-out infinite;
         }
 
 
-        /* =====================================
+        #${BTN_ID} .rjn-bubble-1 {
+          width: 4px !important;
+          height: 4px !important;
+          left: 15% !important;
+          animation-delay: .1s !important;
+        }
+
+
+        #${BTN_ID} .rjn-bubble-2 {
+          width: 3px !important;
+          height: 3px !important;
+          left: 34% !important;
+          animation-delay: .9s !important;
+        }
+
+
+        #${BTN_ID} .rjn-bubble-3 {
+          width: 5px !important;
+          height: 5px !important;
+          left: 57% !important;
+          animation-delay: .45s !important;
+        }
+
+
+        #${BTN_ID} .rjn-bubble-4 {
+          width: 3px !important;
+          height: 3px !important;
+          left: 76% !important;
+          animation-delay: 1.3s !important;
+        }
+
+
+        /* =========================================
            TEXT ASLI
-        ===================================== */
+        ========================================= */
 
-        #${BTN_ID} .float-text{
-          position:absolute!important;
+        #${BTN_ID} .float-text {
+          position: absolute !important;
 
-          top:-34px!important;
-          left:50%!important;
+          top: -34px !important;
 
-          transform:translateX(-50%)!important;
+          left: 50% !important;
+
+          transform: translateX(-50%) !important;
 
           background:
             linear-gradient(
@@ -303,198 +317,213 @@
               #fff200,
               #ffb300,
               #ff6500
-            )!important;
+            ) !important;
 
-          color:#180800!important;
+          color: #180800 !important;
 
           text-shadow:
-            0 1px 1px rgba(255,255,255,.65)!important;
+            0 1px 1px rgba(255,255,255,.65) !important;
 
-          font-size:14px!important;
-          font-weight:900!important;
+          font-size: 14px !important;
 
-          letter-spacing:.4px!important;
-          line-height:1!important;
+          font-weight: 900 !important;
 
-          padding:6px 14px!important;
+          letter-spacing: .4px !important;
 
-          border-radius:999px!important;
+          line-height: 1 !important;
 
-          border:1px solid rgba(255,255,255,.70)!important;
+          padding: 6px 14px !important;
+
+          border-radius: 999px !important;
+
+          border: 1px solid rgba(255,255,255,.70) !important;
 
           box-shadow:
-            0 0 7px rgba(255,230,0,.75),
-            0 0 13px rgba(255,60,0,.50),
-            0 0 20px rgba(255,0,0,.20)!important;
+            0 0 7px rgba(255,230,0,.70),
+            0 0 12px rgba(255,60,0,.45) !important;
 
-          z-index:20!important;
+          z-index: 20 !important;
 
-          white-space:nowrap!important;
+          white-space: nowrap !important;
 
-          pointer-events:none!important;
+          pointer-events: none !important;
 
-          display:block!important;
-          visibility:visible!important;
-          opacity:1!important;
+          display: block !important;
+
+          visibility: visible !important;
+
+          opacity: 1 !important;
 
           animation:
-            partnerTextBlink 2.8s ease-in-out infinite;
+            rjnTextBlink 2.8s ease-in-out infinite;
         }
 
 
-        /* =====================================
-           X CLOSE TETAP
-        ===================================== */
+        /* =========================================
+           X CLOSE
+        ========================================= */
 
-        #${BTN_ID} .close-btn{
-          position:absolute!important;
+        #${BTN_ID} .close-btn {
+          position: absolute !important;
 
-          top:-48px!important;
-          right:-6px!important;
+          top: -48px !important;
 
-          width:22px!important;
-          height:22px!important;
+          right: -6px !important;
 
-          display:flex!important;
+          width: 22px !important;
+          height: 22px !important;
 
-          align-items:center!important;
-          justify-content:center!important;
+          display: flex !important;
 
-          border-radius:50%!important;
+          align-items: center !important;
+          justify-content: center !important;
 
-          border:2px solid #fff!important;
+          border-radius: 50% !important;
 
-          background:#ff0033!important;
+          border: 2px solid #fff !important;
 
-          color:#fff!important;
+          background: #ff0033 !important;
 
-          font-family:Arial,sans-serif!important;
-          font-size:14px!important;
-          font-weight:900!important;
+          color: #fff !important;
+
+          font-family: Arial, sans-serif !important;
+
+          font-size: 14px !important;
+
+          font-weight: 900 !important;
 
           box-shadow:
-            0 0 6px rgba(255,0,51,.75),
-            0 0 12px rgba(255,0,0,.35)!important;
+            0 0 6px rgba(255,0,51,.80),
+            0 0 12px rgba(255,0,0,.35) !important;
 
-          z-index:30!important;
+          z-index: 30 !important;
 
-          cursor:pointer!important;
+          cursor: pointer !important;
 
-          visibility:visible!important;
-          opacity:1!important;
+          visibility: visible !important;
+
+          opacity: 1 !important;
+
+          -webkit-tap-highlight-color: transparent !important;
         }
 
 
-        /* =====================================
-           ANIMASI
-        ===================================== */
+        /* =========================================
+           ANIMASI RING
+        ========================================= */
 
-        @keyframes dragonRingSpin{
-          from{
-            transform:rotate(0deg);
+        @keyframes rjnDragonRing {
+          from {
+            transform: rotate(0deg);
           }
 
-          to{
-            transform:rotate(360deg);
-          }
-        }
-
-
-        @keyframes dragonButtonPulse{
-          0%,100%{
-            transform:scale(1);
-          }
-
-          50%{
-            transform:scale(1.035);
+          to {
+            transform: rotate(360deg);
           }
         }
 
 
-        @keyframes dragonFireGlow{
-          0%,100%{
-            opacity:.48;
-            transform:scale(.94);
+        /* =========================================
+           ANIMASI BUTTON
+        ========================================= */
+
+        @keyframes rjnDragonPulse {
+          0%, 100% {
+            transform: scale(1);
           }
 
-          50%{
-            opacity:1;
-            transform:scale(1.08);
-          }
-        }
-
-
-        @keyframes dragonImageGlow{
-          0%,100%{
-            filter:
-              drop-shadow(0 0 3px rgba(255,255,255,.75))
-              drop-shadow(0 0 6px rgba(255,0,0,.85))
-              drop-shadow(0 0 10px rgba(255,70,0,.55));
-          }
-
-          50%{
-            filter:
-              drop-shadow(0 0 4px rgba(255,255,255,.95))
-              drop-shadow(0 0 9px rgba(255,0,0,1))
-              drop-shadow(0 0 16px rgba(255,70,0,.85));
+          50% {
+            transform: scale(1.035);
           }
         }
 
 
-        @keyframes dragonBubbleRise{
-          0%{
+        /* =========================================
+           ANIMASI FIRE
+        ========================================= */
+
+        @keyframes rjnFireGlow {
+          0%, 100% {
+            opacity: .45;
+            transform: scale(.94);
+          }
+
+          50% {
+            opacity: .95;
+            transform: scale(1.08);
+          }
+        }
+
+
+        /* =========================================
+           ANIMASI BUBBLE
+        ========================================= */
+
+        @keyframes rjnBubbleRise {
+
+          0% {
+            opacity: 0;
+
             transform:
-              translate3d(0,12px,0)
+              translate3d(0, 5px, 0)
               scale(.45);
-
-            opacity:0;
           }
 
-          15%{
-            opacity:.9;
+          15% {
+            opacity: .90;
           }
 
-          50%{
+          45% {
+            opacity: .75;
+
             transform:
-              translate3d(-4px,-20px,0)
+              translate3d(-3px, -20px, 0)
               scale(1);
-
-            opacity:.75;
           }
 
-          80%{
-            opacity:.35;
+          75% {
+            opacity: .40;
           }
 
-          100%{
+          100% {
+            opacity: 0;
+
             transform:
-              translate3d(5px,-55px,0)
+              translate3d(5px, -58px, 0)
               scale(.65);
-
-            opacity:0;
           }
         }
 
 
-        @keyframes partnerTextBlink{
-          0%,100%{
-            opacity:.82;
+        /* =========================================
+           TEXT BLINK
+        ========================================= */
+
+        @keyframes rjnTextBlink {
+
+          0%, 100% {
+            opacity: .82;
           }
 
-          50%{
-            opacity:1;
+          50% {
+            opacity: 1;
           }
         }
 
 
-        @media(prefers-reduced-motion:reduce){
+        /* =========================================
+           REDUCED MOTION
+        ========================================= */
 
+        @media (prefers-reduced-motion: reduce) {
+
+          #${BTN_ID},
           #${BTN_ID}::before,
           #${BTN_ID}::after,
           #${BTN_ID} img,
           #${BTN_ID} .float-text,
-          #${BTN_ID} .dragon-bubble{
-            animation:none!important;
+          #${BTN_ID} .rjn-bubble {
+            animation: none !important;
           }
         }
       }
@@ -504,11 +533,15 @@
   }
 
 
-  function getHideUntil(storageKey) {
+  /* =========================================
+     STORAGE
+  ========================================= */
+
+  function getHideUntil() {
     try {
       return (
         parseInt(
-          localStorage.getItem(storageKey) || "0",
+          localStorage.getItem(PARTNER_STORAGE) || "0",
           10
         ) || 0
       );
@@ -518,25 +551,29 @@
   }
 
 
-  function setHideUntil(storageKey, duration) {
+  function setHideUntil(duration) {
     try {
       localStorage.setItem(
-        storageKey,
+        PARTNER_STORAGE,
         String(Date.now() + duration)
       );
     } catch (error) {}
   }
 
 
+  /* =========================================
+     CREATE RJN BUTTON
+  ========================================= */
+
   function createPartnerButton() {
+
     if (document.getElementById(BTN_ID)) return;
 
-    if (
-      Date.now() <
-      getHideUntil(PARTNER_STORAGE)
-    ) {
+
+    if (Date.now() < getHideUntil()) {
       return;
     }
+
 
     const btn = document.createElement("a");
 
@@ -556,10 +593,10 @@
 
       '<span class="close-btn">✕</span>' +
 
-      '<span class="dragon-bubble"></span>' +
-      '<span class="dragon-bubble"></span>' +
-      '<span class="dragon-bubble"></span>' +
-      '<span class="dragon-bubble"></span>' +
+      '<span class="rjn-bubble rjn-bubble-1"></span>' +
+      '<span class="rjn-bubble rjn-bubble-2"></span>' +
+      '<span class="rjn-bubble rjn-bubble-3"></span>' +
+      '<span class="rjn-bubble rjn-bubble-4"></span>' +
 
       '<img src="' +
       LOGO_URL +
@@ -567,6 +604,7 @@
 
 
     document.body.appendChild(btn);
+
 
     startTextTimer(btn);
 
@@ -587,10 +625,11 @@
 
         btn.remove();
 
+
         setHideUntil(
-          PARTNER_STORAGE,
           PARTNER_HIDE_TIME
         );
+
 
         setTimeout(
           createPartnerButton,
@@ -600,6 +639,10 @@
     );
   }
 
+
+  /* =========================================
+     TEXT ROTATION — ASLI
+  ========================================= */
 
   function startTextTimer(btn) {
 
@@ -647,6 +690,10 @@
   }
 
 
+  /* =========================================
+     INIT
+  ========================================= */
+
   function init() {
 
     injectStyle();
@@ -656,16 +703,22 @@
   }
 
 
+  /* =========================================
+     LOAD
+  ========================================= */
+
   function startAfterPageLoad() {
 
-    requestAnimationFrame(function () {
+    requestAnimationFrame(
+      function () {
 
-      setTimeout(
-        init,
-        LOAD_DELAY
-      );
+        setTimeout(
+          init,
+          LOAD_DELAY
+        );
 
-    });
+      }
+    );
   }
 
 
@@ -680,7 +733,7 @@
     window.addEventListener(
       "load",
       startAfterPageLoad,
-      { once:true }
+      { once: true }
     );
 
   }
